@@ -17,7 +17,7 @@ from datetime import datetime
 from pathlib import Path, PurePosixPath
 from typing import BinaryIO, Optional, Any
 
-from config import BACKUPS_DIR, DATABASE_BACKEND, DATABASE_PATH
+from config import APP_VERSION, BACKUPS_DIR, DATABASE_BACKEND, DATABASE_PATH
 from database import get_db_cursor, get_connection, is_postgres
 from services.storage_service import validate_upload, StorageError
 
@@ -167,7 +167,7 @@ def create_backup(label: str = '', note: str = '') -> Path:
         while output.exists() or _db_archive_row(output.name): output=BACKUPS_DIR/f'PiChat_backup_{stamp}_{i}.zip'; i+=1
         export, counts = _export_database()
         manifest={
-            'format':'pichat-backup','format_version':2,'app_version':'3.4.0',
+            'format':'pichat-backup','format_version':2,'app_version':APP_VERSION,
             'created_at':datetime.now().astimezone().isoformat(timespec='seconds'),
             'database_included':True,'database_file':'database/export.json','table_counts':counts,
             'upload_file_count':int(counts.get('file_objects',0)),
@@ -178,7 +178,7 @@ def create_backup(label: str = '', note: str = '') -> Path:
             z.writestr('backup_manifest.json',json.dumps(manifest,ensure_ascii=False,indent=2))
             z.writestr('database/export.json',json.dumps(export,ensure_ascii=False,separators=(',',':')))
             # Friendly human-readable inventory without hashes or secrets.
-            z.writestr('README_RESTAURATION.txt','Backup portable PiChat 3.4. Les clés API et tokens de session sont exclus.\n')
+            z.writestr('README_RESTAURATION.txt','Backup portable PiChat 3.5. Les clés API et tokens de session sont exclus.\n')
         validate_backup(output); _persist_archive(output,label,note); return output
 
 

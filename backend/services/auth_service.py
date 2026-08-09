@@ -223,7 +223,7 @@ def delete_session(token: str) -> None:
         cursor.execute("DELETE FROM sessions WHERE token = ?", (token,))
 
 # ---------------------------------------------------------------------------
-# PiChat 3.4 - durable anti brute-force
+# PiChat 3.5 - anti brute-force durable
 # ---------------------------------------------------------------------------
 def _login_ip_hash(ip_address: str) -> str:
     import hashlib

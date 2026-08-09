@@ -1,64 +1,34 @@
-# Guide d'installation — PiChat 3.4 FREE ONLINE
+# PiChat 3.5 PERFORMANCE — Installation
 
-## 1. Pré-requis
+## Pour Render / GitHub
 
-- Python 3.9 ou plus récent pour une installation locale.
-- GitHub pour le déploiement simple.
-- En production : PostgreSQL via `DATABASE_URL`.
+Aucun `venv` n'est nécessaire. Ne publie jamais `venv/`, `.venv/`, `.env`, une vraie base SQLite, des backups privés, des clés API ou des tokens. Render reconstruit Python à partir de `requirements.txt` et du `Dockerfile`.
 
-## 2. Installation locale de vérification
+## Mise à jour ultra rapide depuis PiChat 3.4
+
+1. Télécharge la 3.5 et décompresse-la.
+2. GitHub Desktop → **Repository → Show in Finder**.
+3. Remplace le contenu du dépôt local par le contenu de la 3.5, **sans ajouter `venv`**.
+4. GitHub Desktop doit alors afficher les modifications.
+5. Commit : `PiChat 3.5 PERFORMANCE`.
+6. Push origin.
+7. Render redéploie automatiquement.
+
+Ne supprime pas le service Render ni la base PostgreSQL existante.
+
+## Test local facultatif
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
-```
-
-Ne commitez jamais `.env`. Pour un test local sans PostgreSQL, laissez `DATABASE_URL` vide : PiChat utilise SQLite. Pour tester l'assistant de première installation, définissez `PICHAT_SETUP_MODE=1`.
-
-Lancement :
-
-```bash
+export PICHAT_SETUP_MODE=1
+export PICHAT_SECRET_KEY='une-cle-locale-longue'
 uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000
 ```
 
-Ouvrez `/setup`, puis suivez :
+Puis ouvre `http://127.0.0.1:8000/setup`.
 
-1. créer le propriétaire ;
-2. nommer l'instance ;
-3. choisir les paramètres de sécurité et d'inscription ;
-4. ajouter éventuellement une API IA ;
-5. terminer.
+## Vérification de performance
 
-Une fois le propriétaire créé, `/setup` est verrouillé côté API et redirigé côté serveur.
-
-## 3. Données persistantes
-
-### Base
-
-- Local : SQLite reste supporté.
-- Online : PostgreSQL est recommandé et sélectionné automatiquement si `DATABASE_URL` commence par `postgres://` ou `postgresql://`.
-
-### Fichiers
-
-`PICHAT_STORAGE_BACKEND` accepte :
-
-- `database` : les fichiers sont conservés dans `file_objects` ; idéal pour démarrer sans disque persistant ;
-- `s3` : bucket S3-compatible ; recommandé quand les fichiers deviennent nombreux ;
-- `local` : uniquement pour une installation disposant réellement d'un disque persistant.
-
-## 4. Variables essentielles
-
-- `DATABASE_URL` : connexion PostgreSQL.
-- `PICHAT_SECRET_KEY` : secret long et stable, utilisé notamment pour le coffre API.
-- `PICHAT_STORAGE_BACKEND=database`.
-- `PICHAT_COOKIE_SECURE=1` en HTTPS.
-- `PICHAT_TRUST_PROXY=1` derrière Render/reverse proxy.
-
-## 5. Vérification
-
-```bash
-python scripts/diagnostic.py
-python scripts/check_no_secrets.py .
-```
+Dans le chat, le badge de ping indique la médiane des dernières mesures. PiChat privilégie le RTT WebSocket quand la connexion au salon est active et utilise `/api/ping` comme solution de repli. La cible UI est `< 50 ms`, sans garantie réseau absolue.

@@ -57,7 +57,7 @@ def _recommendations(pro: Dict[str, Any], cloud: Dict[str, Any], api: Dict[str, 
     if int(lab.get("active_batches") or 0) > 0:
         items.append({"level": "warning", "title": "Labo encore actif", "text": "Des lots de test sont encore présents dans la base."})
     if not items:
-        items.append({"level": "success", "title": "Prêt", "text": "Les contrôles principaux de PiChat 3.4 sont au vert."})
+        items.append({"level": "success", "title": "Prêt", "text": "Les contrôles principaux de PiChat 3.5 sont au vert."})
     return items[:12]
 
 

@@ -1,40 +1,56 @@
-# Guide de déploiement — GitHub → Render → HTTPS
+# PiChat 3.5 PERFORMANCE — Déploiement Render
 
-## Objectif
+## Mise à jour d'une instance 3.4 déjà en ligne
 
-Aucun Oracle Cloud, aucun Cloudflare Tunnel, aucun token de tunnel et aucun Mac à laisser allumé. Le dépôt contient `render.yaml`, `Dockerfile` et les migrations nécessaires.
+**Ne recrée pas Render et ne recrée pas PostgreSQL.**
 
-## Déploiement Blueprint
+1. Dans PiChat : `Admin → Sauvegardes` et crée un backup.
+2. Remplace le code du dépôt GitHub par PiChat 3.5 PERFORMANCE.
+3. Commit puis Push sur la branche `main`.
+4. Render redéploie automatiquement `pichat-free-online`.
+5. Au démarrage, la migration `350001` est appliquée.
+6. Ouvre `/api/health`, puis `Admin → Mise en ligne`.
+7. Fais un rechargement forcé du navigateur une fois (`⌘⇧R` sur Mac) : le service worker 3.5 supprime les anciens caches.
 
-1. Créez un dépôt GitHub vide.
-2. Placez le contenu de PiChat 3.4 à la racine du dépôt puis poussez-le sur GitHub.
-3. Dans Render, choisissez **New → Blueprint** et connectez ce dépôt.
-4. Render lit `render.yaml`, crée le Web Service Docker et PostgreSQL, puis injecte `DATABASE_URL`.
-5. `PICHAT_SECRET_KEY` est générée automatiquement par le Blueprint. Ne la changez pas après avoir enregistré des clés API.
-6. Lancez le déploiement.
-7. Ouvrez l’URL publique suivie de `/setup` et créez le propriétaire.
-8. Ouvrez `/admin` → **Mise en ligne** et lancez le diagnostic.
+La base Render existante et `PICHAT_SECRET_KEY` doivent être conservées : les comptes, messages, PyCoins, profils, salons, jeux et réglages restent en place.
 
-Le service utilise l’URL HTTPS fournie par l’hébergeur. PiChat lit automatiquement `RENDER_EXTERNAL_URL` lorsqu’elle est présente.
+## Nouveau déploiement
 
-## Ce qu’il faut savoir sur le gratuit Render
+1. Mettre les fichiers sur GitHub, avec `render.yaml` à la racine.
+2. Render → **New → Blueprint**.
+3. Sélectionner le dépôt.
+4. Déployer le Blueprint.
+5. Ouvrir l'URL HTTPS fournie par Render puis `/setup`.
+6. Créer le propriétaire. `/setup` se verrouille ensuite côté serveur.
 
-État vérifié le 9 août 2026 : le Web Service gratuit peut s’endormir après 15 minutes sans requête entrante, et le PostgreSQL gratuit est une base de démarrage de 1 Go qui expire après 30 jours. Le niveau gratuit convient donc à un lancement/test, pas à une instance communautaire durable sans migration.
+## Performance 3.5
 
-PiChat évite malgré tout le principal piège du Web Service gratuit : les comptes, messages, réglages et fichiers ne dépendent pas de son disque éphémère.
+PiChat 3.5 ajoute :
+- ping WebSocket direct sans requête base ;
+- fallback HTTP `/api/ping` sans accès base ;
+- bundles CSS/JS pour les deux écrans les plus lourds (chat et admin) ;
+- compression GZip ;
+- cache immutable des assets `?v=3500` ;
+- service worker 3.5 nettoyant les caches précédents ;
+- mesure de la médiane des dernières latences.
 
-Avant l’expiration de la base gratuite, passez simplement à une base PostgreSQL durable ou remplacez `DATABASE_URL`. Pour les fichiers volumineux, passez `PICHAT_STORAGE_BACKEND=s3`.
+**Objectif d'affichage : moins de 50 ms.** Ce seuil est une cible et non une garantie : la connexion de l'utilisateur, la distance au datacenter et un éventuel réveil du service d'hébergement comptent aussi.
 
-## Domaine personnalisé facultatif
+## Variables importantes
 
-Vous pouvez ajouter plus tard un domaine personnalisé chez l’hébergeur et conserver votre fournisseur DNS habituel. PiChat n’exige pas Cloudflare.
+- `DATABASE_URL` : PostgreSQL
+- `PICHAT_SECRET_KEY` : secret de l'instance — à conserver lors des mises à jour
+- `PICHAT_STORAGE_BACKEND=database` ou stockage S3 compatible
+- `PICHAT_COOKIE_SECURE=1` en HTTPS
+- `PICHAT_INTERNET_MODE=1`
+- `PICHAT_TRUST_PROXY=1`
+- `PICHAT_SETUP_MODE=1`
 
-## Mise à jour 3.4 → 3.5 → 4.0
+## Contrôle rapide
 
-1. **Admin → Sauvegardes** : créez un backup.
-2. Poussez le nouveau code sur GitHub.
-3. L’hébergeur redéploie le conteneur.
-4. Au démarrage, `init_database()` applique les migrations absentes de `schema_migrations`.
-5. Les données restent dans PostgreSQL/stockage persistant.
-
-Ne changez pas `PICHAT_SECRET_KEY` lors d’une simple mise à jour : elle sert à déchiffrer les clés API stockées côté serveur.
+- `/api/health` → `ok: true`
+- `/api/ping` → `target_ms: 50`
+- page de connexion stylée PiChat 3.5
+- indicateur de ping visible
+- WebSocket connecté dans le chat
+- migration `350001` enregistrée dans `schema_migrations`

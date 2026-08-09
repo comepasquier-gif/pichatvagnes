@@ -150,7 +150,7 @@ def _get_private_integration(integration_id: int):
 def _test_openai_key(key: str) -> tuple[bool, str, int]:
     req = urlrequest.Request(
         OPENAI_API_BASE + "/models",
-        headers={"Authorization": "Bearer " + key, "Accept": "application/json", "User-Agent": "PiChat/3.4"},
+        headers={"Authorization": "Bearer " + key, "Accept": "application/json", "User-Agent": "PiChat/3.5"},
         method="GET",
     )
     try:

@@ -127,6 +127,6 @@ def overview()->Dict[str,Any]:
 def create_support_bundle()->Path:
     SUPPORT_DIR.mkdir(parents=True,exist_ok=True);payload=overview();stamp=datetime.now().strftime('%Y%m%d-%H%M%S');path=SUPPORT_DIR/f'PiChat_PRO_Diagnostic_{stamp}.zip'
     with zipfile.ZipFile(path,'w',zipfile.ZIP_DEFLATED) as z:
-        z.writestr('diagnostic.json',json.dumps(payload,ensure_ascii=False,indent=2));z.writestr('README.txt','PiChat 3.4 Diagnostic\nAucun mot de passe, token, cookie, clé API ou base n’est inclus.\n')
+        z.writestr('diagnostic.json',json.dumps(payload,ensure_ascii=False,indent=2));z.writestr('README.txt','PiChat 3.5 Diagnostic\nAucun mot de passe, token, cookie, clé API ou base n’est inclus.\n')
         if (PROJECT_ROOT/'VERSION.txt').exists():z.write(PROJECT_ROOT/'VERSION.txt','VERSION.txt')
     return path

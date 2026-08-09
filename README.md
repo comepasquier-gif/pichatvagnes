@@ -1,27 +1,43 @@
-# PiChat 3.4 FREE ONLINE
+# PiChat 3.5 PERFORMANCE
 
-PiChat 3.4 FREE ONLINE est la branche de PiChat conçue pour être déployée par un particulier sur un hébergeur moderne, sans laisser un Mac allumé et sans tunnel Cloudflare.
+PiChat 3.5 PERFORMANCE est la mise à jour de PiChat 3.4 FREE ONLINE pour un déploiement public simple sur Render, avec PostgreSQL, PWA, WebSocket et une nouvelle identité PiChat/Chavagnes.
 
-## Ce que conserve la 3.4
+## Ce que la 3.5 conserve
 
-La base 3.3.1 reste présente : chat temps réel WebSocket, salons, messages privés, amis, profils, profils gaming, rôles joueur/modo/admin, permissions personnalisables, AutoModo, anti-spam, signalements, PyCoins, services, Arcade, mini-jeux, PiTutor/PiTutor+, PiGame Studio, import de jeux, IA configurable, sauvegardes, administration, PWA/mobile, commandes admin, Centre PRO, diagnostic, recherche et page de statut.
+Aucune fonction métier de la 3.4 n'est supprimée : chat temps réel, salons, messages privés, amis, profils, profils gaming, rôles joueur/modo/admin, permissions modérateurs, AutoModo, anti-spam, signalements, PyCoins, services, Arcade, mini-jeux, PiTutor+, PiGame Studio, imports HTML/CSS/JS/JSON/ZIP, API IA configurable, backups, administration, PWA/mobile, commandes admin, Centre PRO, diagnostic, recherche et page de statut.
 
-Les anciens assistants de tunnel/Railway sont conservés comme outils **legacy** en mode avancé, mais ne sont plus requis par le déploiement FREE ONLINE.
+## Nouveautés 3.5
 
-## Nouveautés 3.4
+- **PiChat 3.5 PERFORMANCE** : nouvelle couche graphique homogène connexion/chat/admin/mobile.
+- Nouvelle mascotte robot-chat et logo PiChat Chavagnes dans `frontend/assets/brand/`.
+- Nouvelles icônes PWA générées à partir de la mascotte.
+- **Mini Bot vivant** avec 48 états référencés et états automatiques (idle, écriture, reconnexion, erreur, succès, admin, PiGame, PiTutor, taps, danse…).
+- **Ping Monitor** HTTP + WebSocket, avec objectif visuel `< 50 ms`.
+- Ping WebSocket traité sans requête base afin de mesurer le RTT du canal temps réel avec un minimum de surcharge.
+- Cache PWA `pichat-v3-3500` entièrement renouvelé pour éliminer le cache 3.4 obsolète.
+- App shell PWA réduit : installation plus rapide, gros modules mis en cache à la demande.
+- **Bundles PERFORMANCE** : le chat passe de 17 CSS + 19 JS à 1 CSS + 1 JS ; l’admin de 21 CSS + 20 JS à 1 CSS + 1 JS, tout en conservant les sources séparées pour compatibilité.
+- Assets `?v=3500` servis avec cache immutable.
+- Header `Server-Timing` pour diagnostiquer le temps serveur.
+- Migration `350001` : mode performance, objectif ping et version du branding.
+- Compatible avec la base PostgreSQL Render déjà créée en 3.4.
 
-- PostgreSQL via `DATABASE_URL`, avec compatibilité SQLite locale.
-- Migrations versionnées et automatiques au démarrage.
-- Assistant `/setup` pour créer le premier propriétaire ; verrouillage serveur après initialisation.
-- Stockage des uploads en base (`database`) ou objet compatible S3 (`s3`) ; le disque temporaire n'est pas la source de vérité.
-- Backup portable v2 stocké en base, restauration et contrôle d'intégrité ; secrets/sessions exclus des exports.
-- Gestionnaire Admin > Intégrations : nom, fournisseur, clé, modèle, test, activation/désactivation, suppression.
-- Clés API chiffrées côté serveur avec `PICHAT_SECRET_KEY`, jamais retournées intégralement.
-- Dashboard PRO et panneau **Mise en ligne** avec score /100.
-- PiGame Studio : HTML, CSS, JS, JSON et ZIP ; pipeline validation/sandbox/preview/validation admin/publication.
-- API PiGame limitée : pseudo, niveau, solde PyCoins en lecture, score, classement et succès. Aucun token n'est fourni à l'iframe.
-- Thèmes PiChat Dark, AMOLED, Light, Discord, Neon + couleurs personnalisables.
-- Durcissement HTTP : cookies HttpOnly/Secure, SameSite, vérification d'origine CSRF, rate limiting, anti brute-force durable, contrôles MIME/uploads.
+## Déploiement existant Render : NE PAS recréer la base
+
+Pour passer d'une instance 3.4 déjà en ligne à 3.5 :
+
+1. **Admin → Sauvegardes → Nouveau backup**.
+2. Remplacer le code du dépôt GitHub par la 3.5, sans ajouter de `venv`, `.env`, base SQLite ou backup privé.
+3. Commit + Push sur la branche `main`.
+4. Render redéploie automatiquement `pichat-free-online`.
+5. Au démarrage, la migration `350001` est appliquée automatiquement.
+6. Les utilisateurs, messages, PyCoins, amis, salons, profils, jeux et réglages restent dans PostgreSQL.
+
+Ne supprimez pas `pichat-db` et ne changez pas `PICHAT_SECRET_KEY`.
+
+## Ping < 50 ms
+
+Le chiffre affiché est une mesure de RTT depuis le navigateur. Vert = objectif atteint (`≤ 50 ms`), orange = latence correcte, rouge = latence élevée. PiChat réduit sa propre surcharge, mais la distance utilisateur ↔ datacenter et la connexion Internet restent hors du contrôle de l'application.
 
 ## Démarrage local
 
@@ -38,26 +54,17 @@ uvicorn main:app --app-dir backend --host 0.0.0.0 --port 8000
 
 Puis ouvrir `http://localhost:8000/setup`.
 
-## Déploiement
+## Fichiers importants
 
-Le chemin le plus simple est : **GitHub → Render Blueprint → Deploy → URL HTTPS**. Voir `GUIDE_DEPLOIEMENT.md`.
-
-## Données
-
-En production, utilisez PostgreSQL. Les fichiers sont, par défaut, stockés dans PostgreSQL (`PICHAT_STORAGE_BACKEND=database`) pour que le serveur web puisse rester stateless. Pour de gros volumes, basculez vers un stockage objet S3-compatible sans modifier les routes applicatives.
-
-## Mises à jour
-
-Les migrations sont dans `migrations/versions/`. Ne supprimez jamais l'ancienne base lors d'une mise à jour. Créez un backup avant déploiement ; le schéma est ensuite migré automatiquement par `init_database()`.
-
-## Outils
-
-```bash
-python scripts/diagnostic.py
-python scripts/check_no_secrets.py .
-python scripts/migrate_sqlite_to_postgres.py /chemin/ancienne-pichat.db --replace
-```
+- `Dockerfile` : Docker Render, avec `PYTHONPATH=/app:/app/backend`.
+- `render.yaml` : Blueprint Render + PostgreSQL.
+- `migrations/versions/v350001_performance_brand.py` : migration 3.5.
+- `frontend/css/brand35.css` : couche graphique 3.5 + Mini Bot.
+- `frontend/js/brand35.js` : marque + états du Mini Bot.
+- `frontend/js/performance35.js` : mesure et affichage du ping.
+- `frontend/service-worker.js` : cache PWA 3.5.
+- `GUIDE_DEPLOIEMENT.md` et `MISE_A_JOUR_3.5_RAPIDE.md`.
 
 ## Sécurité
 
-PiChat ne possède aucune fonction permettant à un administrateur de récupérer un mot de passe en clair. Les mots de passe sont hashés avec bcrypt. Les clés API ne sont pas incluses dans les backups portables non chiffrés.
+Les mots de passe restent hashés. Les clés API restent côté serveur et chiffrées. Les backups exportables excluent les secrets d'API, sessions et tentatives de connexion. Les jeux restent exécutés dans leur sandbox PiGame.

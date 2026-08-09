@@ -9,6 +9,7 @@ VERSIONS = [
     ("340001", "migrations.versions.v340001_online_core"),
     ("340002", "migrations.versions.v340002_game_security"),
     ("340003", "migrations.versions.v340003_setup_hardening"),
+    ("350001", "migrations.versions.v350001_performance_brand"),
 ]
 
 

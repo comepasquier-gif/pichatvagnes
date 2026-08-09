@@ -18,7 +18,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
-from security_middleware import SecurityHeadersMiddleware, RateLimitMiddleware
+from security_middleware import SecurityHeadersMiddleware, RateLimitMiddleware, PerformanceHeadersMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 
 from config import APP_NAME, APP_VERSION, FRONTEND_DIR, UPLOADS_DIR, INTERNET_MODE, ALLOWED_HOSTS, RAILWAY_MODE, NORTHFLANK_MODE, RENDER_MODE
@@ -66,6 +66,7 @@ app = FastAPI(
 )
 
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(PerformanceHeadersMiddleware)
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=900)
 if INTERNET_MODE and ALLOWED_HOSTS:

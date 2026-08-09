@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "PiChat 3.4 FREE ONLINE",
+  "name": "PiChat 3.5 PERFORMANCE",
   "short_name": "PiChat",
-  "description": "Chat multi-espaces avec PiGame Studio, Arcade, profils gaming, PWA, modération et PiTutor+.",
+  "description": "PiChat 3.5 PERFORMANCE : chat temps réel, Mini Bot, PiGame Studio, Arcade, profils gaming, PWA, modération, PiTutor+ et monitoring de latence.",
   "lang": "fr-FR",
   "start_url": "/?source=pwa",
   "scope": "/",
@@ -13,8 +13,8 @@
     "minimal-ui"
   ],
   "orientation": "portrait-primary",
-  "background_color": "#1e1f22",
-  "theme_color": "#0a0d17",
+  "background_color": "#050817",
+  "theme_color": "#07112b",
   "categories": [
     "social",
     "education",

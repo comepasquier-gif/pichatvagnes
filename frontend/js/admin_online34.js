@@ -11,6 +11,6 @@
    $('online34-checks').innerHTML=(launch.checks||[]).map(c=>`<div class="online34-check ${c.ok?'ok':'bad'}"><span>${c.label}</span><b>${c.ok?'OK':'À corriger'}</b></div>`).join('')||'<p class="muted">Aucun diagnostic disponible.</p>';
  }
  async function load(){try{render(await api('/api/admin/pro'))}catch(e){const box=$('online34-checks');if(box)box.innerHTML=`<p class="error-message">${e.message}</p>`}}
- function bind(){$('online34-refresh')?.addEventListener('click',load);document.querySelector('[data-tab="online34"]')?.addEventListener('click',load);if(location.hash==='#online34')load()}
+ function bind(){window.addEventListener('pichat:ping',e=>{const el=$('online35-ping');if(el){const ms=Number(e.detail?.ms||0);el.textContent=ms?`${ms} ms · ${ms<=50?'objectif atteint ✓':ms<=110?'correct':'à optimiser'}`:'Mesure…'}});$('online34-refresh')?.addEventListener('click',load);document.querySelector('[data-tab="online34"]')?.addEventListener('click',load);if(location.hash==='#online34')load()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();

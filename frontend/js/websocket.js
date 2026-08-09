@@ -12,6 +12,9 @@ let reconnectTimer=null;
 let socketGeneration=0;
 let queuedChatMessages=[];
 let sendFormBound=false;
+let p35PingTimer=null;
+let p35PingSeq=0;
+const p35PendingPings=new Map();
 
 async function loadProfanityFilter(){try{const r=await fetch('/api/moderation/filter',{credentials:'same-origin'});if(r.ok)profanityFilter=await r.json()}catch{}}
 function escapeRegex(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
@@ -112,12 +115,15 @@ function connectWebSocket(roomId,generation=socketGeneration){
     if(generation!==socketGeneration||Number(roomId)!==Number(currentRoomId)||chatSocket!==socket){try{socket.close()}catch{};return}
     updateWsStatus('En ligne','connected');
     updateComposerConnection('Prêt à envoyer','connected');
+    startP35SocketPing(socket,generation);
     flushQueuedMessages();
   });
   socket.addEventListener('close',()=>{
     if(generation!==socketGeneration||Number(roomId)!==Number(currentRoomId)||chatSocket!==socket)return;
     chatSocket=null;
+    stopP35SocketPing();
     updateWsStatus('Reconnexion…','disconnected');
+    window.PiChatMiniBot?.setState?.(24,1200);
     updateComposerConnection(queuedChatMessages.some(x=>Number(x.room_id)===Number(roomId))?'Message en attente — reconnexion…':'Reconnexion au chat…','connecting');
     reconnectTimer=setTimeout(()=>connectWebSocket(roomId,generation),1200);
   });
@@ -159,7 +165,8 @@ function queueChatMessage(content,replyToId){
 }
 
 function handleIncomingMessage(data){
-  if(data.type==='new_message'){const follow=isNearBottom();appendMessageToChat(data.message);if(follow||Number(data.message.user_id)===Number(window.CURRENT_USER?.id))scrollToBottom(true);else{unreadMessageCount+=1;updateScrollLatestButton();}}
+  if(data.type==='pong'){recordP35SocketPong(data);return}
+  if(data.type==='new_message'){window.dispatchEvent(new CustomEvent('pichat:new-message',{detail:data.message}));const follow=isNearBottom();appendMessageToChat(data.message);if(follow||Number(data.message.user_id)===Number(window.CURRENT_USER?.id))scrollToBottom(true);else{unreadMessageCount+=1;updateScrollLatestButton();}}
   else if(data.type==='message_updated'){replaceMessage(data.message);}
   else if(data.type==='reactions_updated'){updateReactionRow(data.message_id,data.reactions||[]);}
   else if(data.type==='user_joined'){appendSystemMessage(`${data.username} est arrivé`);window.PiChatCommunity?.refreshMembers?.();}
@@ -170,6 +177,26 @@ function handleIncomingMessage(data){
   else if(data.type==='direct_message'||data.type==='direct_message_updated'){window.dispatchEvent(new CustomEvent('pichat:dm-event',{detail:data}));}
   else if(data.type==='forced_logout'){alert(data.reason||'Ton accès à PiChat a été retiré.');location.href='/login';}
 }
+
+function startP35SocketPing(socket,generation){
+  stopP35SocketPing();
+  const send=()=>{
+    if(generation!==socketGeneration||chatSocket!==socket||socket.readyState!==WebSocket.OPEN)return;
+    const nonce=`${Date.now().toString(36)}-${++p35PingSeq}`;
+    p35PendingPings.set(nonce,performance.now());
+    try{socket.send(JSON.stringify({type:'ping',client_ts:Date.now(),nonce}))}catch{}
+    // Oublie les vieux pings pour ne jamais accumuler de mémoire.
+    for(const [key,started] of p35PendingPings){if(performance.now()-started>30000)p35PendingPings.delete(key)}
+  };
+  send();p35PingTimer=setInterval(send,5000);
+}
+function stopP35SocketPing(){if(p35PingTimer){clearInterval(p35PingTimer);p35PingTimer=null}p35PendingPings.clear()}
+function recordP35SocketPong(data){
+  const started=p35PendingPings.get(data.nonce);if(started==null)return;
+  p35PendingPings.delete(data.nonce);const ms=performance.now()-started;
+  window.PiChatPerf35?.record?.(ms,'WebSocket');
+}
+
 function updateWsStatus(text,cls){const x=document.getElementById('ws-status');x.textContent=text;x.className='ws-pill '+cls}
 
 function avatarFor(message){

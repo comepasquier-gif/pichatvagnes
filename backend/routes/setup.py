@@ -69,7 +69,7 @@ def setup_complete(data: SetupRequest, request: Request):
             )
             c.execute(
                 "INSERT INTO admin_audit_logs(actor_id,action,target,details) VALUES (?,?,?,?)",
-                (owner_id, 'setup_complete', username, 'PiChat 3.4 FREE ONLINE initialisé'),
+                (owner_id, 'setup_complete', username, 'PiChat 3.5 PERFORMANCE initialisé'),
             )
     except IntegrityError:
         raise HTTPException(status_code=409, detail='Le propriétaire existe déjà. /setup est verrouillé.')

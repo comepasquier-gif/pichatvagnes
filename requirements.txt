@@ -1,4 +1,4 @@
-# PiChat 3.4 FREE ONLINE — Python 3.9+
+# PiChat 3.5 PERFORMANCE — Python 3.9+
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 bcrypt==4.2.1

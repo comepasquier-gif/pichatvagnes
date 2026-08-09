@@ -1,4 +1,4 @@
-"""Database compatibility layer for PiChat 3.4.
+"""Database compatibility layer for PiChat 3.5.
 
 PiChat keeps its original parameterized SQLite-flavoured SQL so existing
 features remain compatible. In online mode DATABASE_URL switches the exact
@@ -1573,7 +1573,7 @@ def init_database() -> None:
         # Une installation neuve crée le premier admin via create_admin.py --ensure.
         # Les admins déjà présents dans une base migrée sont conservés.
 
-    # PiChat 3.4: migrations are versioned and idempotent. They run only after
+    # PiChat 3.5: migrations are versioned and idempotent. They run only after
     # the complete legacy schema exists, preserving every 3.3 feature.
     from migrations.runner import apply_migrations
     apply_migrations()

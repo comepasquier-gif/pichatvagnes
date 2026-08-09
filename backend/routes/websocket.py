@@ -95,6 +95,17 @@ async def chat_websocket(websocket: WebSocket, room_id: int = Query(default=None
         while True:
             data = await websocket.receive_json()
 
+            # PiChat 3.5 PERFORMANCE : pong immédiat, sans requête DB, afin de
+            # mesurer le vrai RTT WebSocket du chat. Aucune donnée sensible
+            # n'est exposée et le ping ne déclenche aucune action utilisateur.
+            if data.get("type") == "ping":
+                await websocket.send_json({
+                    "type": "pong",
+                    "client_ts": data.get("client_ts"),
+                    "nonce": data.get("nonce"),
+                })
+                continue
+
             # Le ban est revérifié à CHAQUE action, même si la page était déjà ouverte.
             if not is_user_active(user["id"]):
                 try:

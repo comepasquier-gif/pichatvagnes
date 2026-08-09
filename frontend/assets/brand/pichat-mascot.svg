@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Mascotte PiChat robot-chat">
+  <defs>
+    <linearGradient id="ear" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#21e5ff"/><stop offset="1" stop-color="#3467ff"/></linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#dce8ff"/></linearGradient>
+    <radialGradient id="face" cx="50%" cy="28%" r="75%"><stop stop-color="#173c66"/><stop offset=".42" stop-color="#081b38"/><stop offset="1" stop-color="#030918"/></radialGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#24d9ff"/><stop offset=".58" stop-color="#267bff"/><stop offset="1" stop-color="#5a4dff"/></linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="17" stdDeviation="20" flood-color="#020a1d" flood-opacity=".35"/></filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M118 170 96 84c-3-14 12-25 24-17l85 59c15-5 32-8 51-8s36 3 51 8l85-59c12-8 27 3 24 17l-22 86c35 32 55 77 55 126v44c0 67-54 121-121 121H184c-67 0-121-54-121-121v-44c0-49 20-94 55-126Z" fill="url(#shell)" stroke="#9fc9ff" stroke-width="6"/>
+    <path d="m118 111 18 72 62-50-80-22Z" fill="url(#ear)" opacity=".96"/>
+    <path d="m394 111-18 72-62-50 80-22Z" fill="url(#ear)" opacity=".96"/>
+    <rect x="116" y="164" width="280" height="228" rx="91" fill="url(#face)" stroke="#1c6aff" stroke-width="8"/>
+    <path d="M155 196c39-22 163-29 205 3" fill="none" stroke="#3edcff" stroke-width="4" opacity=".25" stroke-linecap="round"/>
+    <g fill="none" stroke="#4beaff" stroke-width="13" stroke-linecap="round" filter="url(#glow)">
+      <path d="M174 262q31 39 62 0"/>
+      <path d="M276 262q31 39 62 0"/>
+      <path d="M236 321q20 17 40 0" stroke-width="10"/>
+      <path d="M164 318h-24M168 334h-20M348 318h24M344 334h20" stroke-width="7" opacity=".9"/>
+    </g>
+    <g>
+      <rect x="47" y="225" width="71" height="103" rx="34" fill="url(#shell)" stroke="#81b7ff" stroke-width="6"/>
+      <rect x="394" y="225" width="71" height="103" rx="34" fill="url(#shell)" stroke="#81b7ff" stroke-width="6"/>
+      <rect x="64" y="242" width="37" height="69" rx="18" fill="url(#blue)"/>
+      <rect x="411" y="242" width="37" height="69" rx="18" fill="url(#blue)"/>
+    </g>
+    <path d="M150 390c-4 35 0 63 7 79 26-7 51-24 69-48" fill="url(#shell)" stroke="#9fc9ff" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+</svg>

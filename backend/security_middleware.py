@@ -61,3 +61,23 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                                 headers={'Retry-After': str(window)})
         q.append(now)
         return await call_next(request)
+
+
+class PerformanceHeadersMiddleware(BaseHTTPMiddleware):
+    """Mesure le temps ASGI et rend les assets versionnés réellement cacheables."""
+    async def dispatch(self, request: Request, call_next):
+        started = time.perf_counter()
+        response = await call_next(request)
+        duration_ms = (time.perf_counter() - started) * 1000.0
+        response.headers.setdefault('Server-Timing', f'app;dur={duration_ms:.1f}')
+        response.headers.setdefault('X-PiChat-Performance', '3.5')
+        path = request.url.path
+        if path.startswith(('/css/','/js/','/assets/')):
+            q = request.url.query
+            if 'v=3500' in q:
+                response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+            else:
+                response.headers.setdefault('Cache-Control', 'public, max-age=3600')
+        elif path.endswith(('.html','/login','/register','/admin','/spaces','/status','/setup')) or path == '/':
+            response.headers.setdefault('Cache-Control', 'no-cache')
+        return response
