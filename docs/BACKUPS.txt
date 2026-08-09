@@ -1,0 +1,25 @@
+PICHAT 1.1.0 — BACKUP STUDIO
+=============================
+
+1. Lance PiChat normalement.
+2. Ouvre : http://localhost:8000/admin#backups
+3. Clique sur « Backups » dans le menu de gauche.
+
+Depuis cette page tu peux :
+- créer une sauvegarde ;
+- lui donner une étiquette et une note ;
+- vérifier qu'elle n'est pas corrompue ;
+- la renommer ou la dupliquer ;
+- l'importer ou la télécharger ;
+- exporter la liste des comptes en CSV ;
+- ajouter, remplacer, extraire ou retirer des fichiers uploads ;
+- restaurer le backup avec une sauvegarde de sécurité automatique ;
+- supprimer un backup.
+
+Les mots de passe ne sont jamais affichés ou exportés.
+
+STATUT EASTER EGG
+-----------------
+Quand un admin garde /admin ouvert, la liste des membres affiche :
+« 🕵️ En train de manigancer quelque chose… »
+Il est alors considéré comme en ligne.

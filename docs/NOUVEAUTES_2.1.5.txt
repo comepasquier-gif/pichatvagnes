@@ -1,0 +1,61 @@
+PiChat 2.1.5 — Correctif Envoi & Pack Labo
+==========================================
+
+1. CORRECTIF DU BOUTON D'ENVOI
+- Le formulaire de message est lié dès que l'interface est disponible.
+- Reconnexion WebSocket automatique lorsque la connexion est coupée.
+- Jusqu'à 20 messages peuvent être placés temporairement en attente.
+- Les messages en attente sont envoyés dès le retour de la connexion.
+- Un état visible indique : connexion, prêt à envoyer, message en attente ou erreur.
+- Le bouton « Envoyer en validation » de PiGame Studio utilise désormais des
+  gestionnaires d'événements fiables et se désactive pendant l'opération.
+
+2. PACK LABO & DIAGNOSTIC
+Accessible dans Administration > Labo test.
+
+Il permet de créer de 1 à 100 comptes temporaires. Le réglage conseillé crée
+20 comptes avec :
+- cinq classes de démonstration ;
+- trois comptes modérateurs (petit, normal et super) ;
+- PyCoins et XP ;
+- messages publics et privés ;
+- profils Valorant, Brawl Stars, Roblox et Fortnite ;
+- badges ;
+- scores Arcade ;
+- signalements et incidents AutoModo ;
+- demandes d'inscription ;
+- un brouillon PiGame Studio permettant de tester l'envoi en validation.
+
+Le panneau peut aussi :
+- afficher un diagnostic rapide ;
+- envoyer un vrai message de diagnostic ;
+- copier les identifiants ;
+- exporter les identifiants au format CSV ;
+- supprimer un lot ou tous les lots de test.
+
+SÉCURITÉ DU NETTOYAGE
+Les comptes sont associés à l'identifiant interne de leur lot. Le nettoyage ne
+supprime pas les utilisateurs selon un simple préfixe et ne touche donc pas aux
+vrais comptes portant un nom proche.
+
+COMMANDES
+Créer 20 comptes :
+  python3 pichat.py test-pack create --accounts 20
+
+Choisir un préfixe et un mot de passe :
+  python3 pichat.py test-pack create --accounts 20 --prefix demo --password 'PiChatTest2026!'
+
+Afficher le diagnostic :
+  python3 pichat.py test-pack status
+
+Supprimer tous les lots actifs :
+  python3 pichat.py test-pack clean
+
+Commande directe équivalente :
+  source venv/bin/activate
+  python test_pack.py create --accounts 20
+
+COMPATIBILITÉ
+- macOS
+- Python 3.9 et versions ultérieures
+- Migration automatique depuis PiChat 2.1.4

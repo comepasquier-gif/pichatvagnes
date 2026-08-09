@@ -1,0 +1,119 @@
+{
+  "id": "/",
+  "name": "PiChat 3.4 FREE ONLINE",
+  "short_name": "PiChat",
+  "description": "Chat multi-espaces avec PiGame Studio, Arcade, profils gaming, PWA, modération et PiTutor+.",
+  "lang": "fr-FR",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#1e1f22",
+  "theme_color": "#0a0d17",
+  "categories": [
+    "social",
+    "education",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/assets/icons/pichat-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/pichat-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/pichat-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/pichat-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ouvrir le chat",
+      "short_name": "Chat",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/assets/icons/pichat-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Aide aux devoirs",
+      "short_name": "PiTutor",
+      "url": "/?open=tutor",
+      "icons": [
+        {
+          "src": "/assets/icons/pichat-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Créer un mini-jeu",
+      "short_name": "PiGame Studio",
+      "url": "/?open=game-studio",
+      "icons": [
+        {
+          "src": "/assets/icons/pichat-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Administration",
+      "short_name": "Admin",
+      "url": "/admin",
+      "icons": [
+        {
+          "src": "/assets/icons/pichat-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

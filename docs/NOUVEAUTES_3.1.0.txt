@@ -1,0 +1,16 @@
+PiChat 3.1.0 — PRO Online
+==========================
+
+Nouveautés principales :
+- Centre de lancement 3.1 dans l'administration.
+- Score et préflight de mise en ligne.
+- Backup + contrôle avant lancement en un clic.
+- Démarrage rapide d'un tunnel HTTPS Cloudflare depuis le Centre 3.1.
+- Résumé API, PiGame Studio, Labo, modules, statistiques et recommandations.
+- Nouvelle page publique /status.
+- Palette de commandes universelle Cmd/Ctrl+K dans le chat.
+- Raccourci direct « Importer un jeu » vers PiGame Studio.
+- Refonte graphique PRO 3.1 : profondeur, panneaux, interactions et mobile.
+- Cache PWA versionné 3.1.
+
+Aucun fichier pichat.db, .env, clé API ou token Cloudflare n'est inclus dans le pack de mise à jour.

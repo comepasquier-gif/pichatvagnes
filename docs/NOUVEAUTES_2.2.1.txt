@@ -1,0 +1,43 @@
+PICHAT 2.2.1 — PICHAT CLOUD
+================================
+
+PiChat Cloud ajoute une mise en ligne HTTPS pilotée depuis l’administration.
+
+MODE RAPIDE
+- Installation automatique de cloudflared sans Homebrew.
+- Téléchargement de la version macOS Apple Silicon ou Intel depuis le dépôt officiel Cloudflare.
+- Création d’une URL temporaire https://....trycloudflare.com.
+- Copie, partage, ouverture et QR code de l’adresse.
+- Arrêt et redémarrage du tunnel depuis l’administration.
+
+MODE PERMANENT
+- Enregistrement privé d’un jeton Cloudflare Tunnel.
+- Adresse stable avec un domaine ou sous-domaine personnel.
+- Démarrage et arrêt depuis PiChat.
+- Reconnexion automatique facultative au lancement de PiChat.
+- Jeton stocké dans runtime/cloud/tunnel-token.txt avec permissions privées.
+- Le jeton n’est jamais renvoyé au navigateur après enregistrement.
+
+SÉCURITÉ
+- Seuls les administrateurs peuvent gérer PiChat Cloud.
+- cloudflared est exécuté sans privilèges administrateur dans le dossier PiChat.
+- Aucun port de la box Internet n’est ouvert par PiChat Cloud.
+- Les cookies de connexion deviennent Secure lorsqu’une requête arrive par HTTPS.
+- Les journaux masquent les fragments ressemblant à un jeton.
+- runtime/ et deployment/ sont protégés lors des mises à jour intégrées.
+
+COMMANDES
+python3 pichat.py cloud
+    Installe cloudflared si nécessaire, démarre le tunnel configuré ou une URL
+    temporaire, puis lance PiChat en mode Internet.
+
+python3 pichat.py cloud install
+python3 pichat.py cloud quick
+python3 pichat.py cloud permanent
+python3 pichat.py cloud status
+python3 pichat.py cloud stop
+
+LIMITES
+- Les URL trycloudflare.com sont temporaires et prévues pour les tests.
+- Le Mac et PiChat doivent rester allumés et connectés à Internet.
+- Un domaine permanent doit être ajouté au compte Cloudflare par son propriétaire.

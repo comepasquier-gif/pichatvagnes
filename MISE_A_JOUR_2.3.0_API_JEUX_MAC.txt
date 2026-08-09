@@ -1,0 +1,36 @@
+MISE À JOUR PICHAT 2.3.0 — API FACILE & JEUX
+
+1. Arrêter PiChat avec Ctrl + C.
+
+2. Créer une sauvegarde :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresser la mise à jour dans Téléchargements :
+   cd ~/Downloads
+   unzip -o PiChat_v2.3.0_Mac_API_Jeux_Neo.zip
+
+4. Réparer et appliquer les dépendances :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Relancer :
+   python3 pichat.py network
+
+6. Sur le Mac : rechargement complet avec Commande + Maj + R.
+   Sur téléphone : fermer complètement PiChat puis le rouvrir.
+
+CONFIGURER L'API SANS TERMINAL
+- Ouvrir http://localhost:8000/admin#integrations
+- Coller la clé OpenAI
+- Choisir le modèle
+- Activer PiAI et/ou la génération de jeux
+- Enregistrer
+- Tester la connexion
+
+IMPORTER UN JEU
+- Ouvrir PiGame Studio dans le chat
+- Utiliser la zone « Import facile »
+- Déposer un fichier JSON, HTML ou ZIP
+- Tester le brouillon
+- L'envoyer en validation

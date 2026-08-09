@@ -1,0 +1,9 @@
+# PiChat 3.4 FREE ONLINE — Python 3.9+
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+bcrypt==4.2.1
+python-multipart==0.0.20
+qrcode==8.2
+psycopg2-binary>=2.9,<3
+cryptography>=43,<46
+boto3>=1.34,<2

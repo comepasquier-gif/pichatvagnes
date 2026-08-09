@@ -1,0 +1,28 @@
+MISE À JOUR PICHAT 2.1 SUR MAC
+=============================
+
+1. Arrêter PiChat avec Ctrl+C.
+
+2. Backup :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresser la V2.1 par-dessus :
+   cd ~/Downloads
+   unzip -o PiChat_v2.1.0_Mac_Ultimate.zip
+
+4. Réparer et migrer automatiquement :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Lancer sur le Mac :
+   python3 pichat.py start
+
+6. Lancer pour les téléphones du même Wi-Fi :
+   python3 pichat.py network
+
+7. Préparer une URL Internet HTTPS :
+   python3 pichat.py prepare-internet https://chat.mondomaine.fr
+
+L’application PWA installée reste la même. Ferme-la et rouvre-la si le cache
+n’affiche pas immédiatement PiChat 2.1.

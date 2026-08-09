@@ -1,0 +1,22 @@
+PICHAT 2.4.0 PRO — CONTROL CENTER
+
+Cette édition conserve toutes les fonctions de PiChat 2.3.0 et ajoute un centre PRO orienté mise en ligne et maintenance.
+
+NOUVEAU CENTRE PRO
+- Score de préparation sur 100.
+- Vérification rapide de la base SQLite.
+- État du tunnel HTTPS PiChat Cloud.
+- État de l'API OpenAI sans révéler la clé.
+- Statistiques utilisateurs, messages, sessions et stockage.
+- Contrôle de la présence des fichiers essentiels.
+- Âge du dernier backup.
+- Détection des comptes créés par le Labo de test.
+- Espace disque disponible.
+
+OUTILS PRO
+- Backup immédiat depuis le Centre PRO.
+- Paquet de diagnostic téléchargeable pour le support.
+- Le paquet de diagnostic exclut la base, les mots de passe, les sessions, les clés API, .env et les tokens Cloudflare.
+
+MISE EN LIGNE
+Le score PRO aide à vérifier les points importants avant l'ouverture sur Internet. Le HTTPS n'est pas obligatoire pour travailler en local, mais il est recommandé avant de partager PiChat sur Internet.

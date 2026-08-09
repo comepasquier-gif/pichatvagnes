@@ -1,0 +1,56 @@
+PICHAT 1.1.2 — PERMISSIONS DES MODÉRATEURS
+==========================================
+
+DANS L'ADMINISTRATION
+---------------------
+1. Ouvre /admin
+2. Va dans Utilisateurs
+3. Clique sur Grade pour le compte voulu
+4. Choisis Modérateur
+5. Indique sa classe
+6. Coche uniquement les possibilités autorisées
+7. Enregistre
+
+Le compte est déconnecté pour prendre immédiatement les nouveaux droits.
+Un modo reste toujours limité aux utilisateurs et au serveur de sa classe.
+Dans Général, il peut discuter mais n'a aucun pouvoir de modération.
+
+DEPUIS LE TERMINAL
+------------------
+Voir les permissions :
+
+  cd ~/Downloads/PiChat
+  source venv/bin/activate
+  python set_moderator.py --list
+
+Modo avec les droits standards :
+
+  python set_moderator.py user toto class 5C
+
+Modo avec seulement avertissement + mute + signalements :
+
+  python set_moderator.py user toto class 5C permissions warn,mute,reports
+
+Modo avec tous les droits de sa classe :
+
+  python set_moderator.py user toto class 5C permissions all
+
+Retirer le grade modo :
+
+  python set_moderator.py user toto remove
+
+PERMISSIONS DISPONIBLES
+-----------------------
+reports_view       Voir les signalements de sa classe
+reports_resolve    Résoudre ou rejeter les signalements
+messages_delete    Supprimer les messages de sa classe
+users_warn         Envoyer des avertissements
+users_mute         Mute et dé-mute
+users_kick         Expulser une session
+users_tempban      Ban temporaire
+users_ban          Ban définitif
+users_unban        Débannir
+notes_manage       Notes privées de modération
+history_view       Historique des sanctions
+slowmode_manage    Mode lent de sa classe
+automod_review     Réviser les incidents AutoModo

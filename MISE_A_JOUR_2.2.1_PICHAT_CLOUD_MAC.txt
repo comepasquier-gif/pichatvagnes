@@ -1,0 +1,44 @@
+MISE À JOUR PICHAT 2.2.1 — PICHAT CLOUD
+=======================================
+
+1. Arrêter PiChat avec Ctrl + C.
+
+2. Créer une sauvegarde :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresser le ZIP depuis Téléchargements :
+   cd ~/Downloads
+   unzip -o PiChat_v2.2.1_Mac_PiChat_Cloud.zip
+
+4. Installer la nouvelle dépendance et appliquer les migrations :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Relancer PiChat :
+   python3 pichat.py network
+
+6. Dans le navigateur :
+   http://localhost:8000/admin#deployment
+
+7. Cliquer sur :
+   Installer cloudflared
+   puis
+   Créer une URL HTTPS temporaire
+
+Le bouton d’installation n’utilise pas Homebrew.
+
+COMMANDE TOUT-EN-UN
+-------------------
+Après l’installation de la mise à jour, cette commande peut installer le
+connecteur, créer une URL et lancer PiChat :
+
+   cd ~/Downloads/PiChat
+   python3 pichat.py cloud
+
+IMPORTANT
+---------
+- Ne jamais publier le jeton Cloudflare.
+- Supprimer les comptes du Pack Labo avant d’ouvrir PiChat au public.
+- Changer les mots de passe temporaires.
+- Le Mac doit rester allumé pour que l’adresse fonctionne.

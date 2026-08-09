@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#5865f2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PiChat">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/icons/pichat-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/pichat-192.png">
+  <title>PiChat</title>
+  <link rel="stylesheet" href="/css/style.css?v=3200">
+  <link rel="stylesheet" href="/css/discord.css?v=3200">
+  <link rel="stylesheet" href="/css/ui_settings.css?v=3200">
+  <link rel="stylesheet" href="/css/discord104.css?v=3200">
+  <link rel="stylesheet" href="/css/pwa.css?v=3200">
+  <link rel="stylesheet" href="/css/mobile112.css?v=3200">
+  <link rel="stylesheet" href="/css/features113.css?v=3200">
+  <link rel="stylesheet" href="/css/v2.css?v=3200">
+  <link rel="stylesheet" href="/css/v21.css?v=3200">
+<link rel="stylesheet" href="/css/gaming_profiles.css?v=3200">
+<link rel="stylesheet" href="/css/arcade.css?v=3200">
+<link rel="stylesheet" href="/css/game_studio.css?v=3200">
+<link rel="stylesheet" href="/css/final_packs.css?v=3200">
+<link rel="stylesheet" href="/css/neo23.css?v=3200">
+<link rel="stylesheet" href="/css/pro31.css?v=3200">
+<link rel="stylesheet" href="/css/free_online34.css?v=3400">
+</head>
+<body class="discord-body">
+<div id="pwa-offline-banner" class="pwa-offline-banner">📡 Hors connexion — reconnexion en cours</div>
+<div id="pwa-update-banner" class="pwa-update-banner"><span>Une nouvelle version de PiChat est prête.</span><button id="pwa-update-now">Mettre à jour</button><button id="pwa-update-later" class="pwa-secondary">Plus tard</button></div>
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div class="discord-shell" id="chat-section" style="display:none">
+  <aside class="server-rail" id="server-rail">
+    <button class="server-icon home-server chat-logo" title="Accueil" data-tooltip="Accueil PiChat">P</button>
+    <a class="server-icon utility-server" href="/spaces" title="Espaces PiChat 2.1" data-tooltip="Espaces & établissements">🏫</a>
+    <div class="server-divider"></div>
+    <div id="server-list" class="server-list"></div>
+    <div class="server-spacer"></div>
+    <a id="admin-link" class="server-icon utility-server" href="/admin" style="display:none" title="Administration" data-tooltip="Administration">⚙</a>
+    <a id="moderation-link" class="server-icon utility-server" href="/moderation" style="display:none" title="Modération" data-tooltip="Modération">🛡</a>
+    <button id="install-app-button" class="server-icon utility-server" title="Installer PiChat" data-tooltip="Installer l’application">⬇</button>
+    <button id="pwa-open-settings" class="server-icon utility-server" title="Application & notifications" data-tooltip="Application & notifications">🔔</button>
+    <button id="help-button" class="server-icon utility-server" title="Aide" data-tooltip="Aide & commandes">?</button>
+  </aside>
+
+  <aside class="channel-panel" id="channel-panel">
+    <header class="server-header">
+      <div><strong id="sidebar-app-name">PiChat</strong><small id="sidebar-subtitle">Campus Messenger</small></div>
+      <button id="close-channels" class="icon-button mobile-only">×</button>
+    </header>
+
+    <div class="channel-scroll">
+      <div class="channel-category"><span>SALONS TEXTUELS</span></div>
+      <div id="channel-list" class="channel-list"></div>
+
+      <div class="channel-category"><span>OUTILS</span></div>
+      <button class="channel-button tool-channel" id="open-direct-messages"><span>✉️</span> Messages privés <b id="dm-unread-badge">0</b></button>
+      <button class="channel-button tool-channel" id="open-final-packs"><span>🤝</span> Social & planning <b>2.2</b></button>
+      <button class="channel-button tool-channel" id="open-tutor"><span>📚</span> PiTutor+ <b>2.1</b></button>
+      <button class="channel-button tool-channel" id="open-games"><span>🎮</span> Mini-jeux</button>
+      <button class="channel-button tool-channel" id="open-game-studio"><span>🧪</span> PiGame Studio <b>NEW</b></button>
+      <button class="channel-button tool-channel" id="open-gaming-profile"><span>🏅</span> Badges & profils gaming <b>NEW</b></button>
+      <button class="channel-button tool-channel" id="open-economy"><span>🪙</span> PyCoins & serveurs</button><button class="channel-button tool-channel" id="open-code-lab"><span>🐍</span> PiCode IA</button>
+      <button class="channel-button tool-channel" id="open-profile"><span>👤</span> Mon profil</button>
+      <button class="channel-button tool-channel" id="open-personalization"><span>🎨</span> Personnalisation</button>
+
+      <div class="channel-category"><span>ASTUCES</span></div>
+      <div class="sidebar-tip">Mentionne <strong>@PiAI</strong> dans un salon ou utilise le mode Tuteur pour les devoirs.</div>
+      <div class="sidebar-tip">Tape <strong>/games</strong> pour voir les commandes de jeu.</div>
+    </div>
+
+    <div class="user-dock" id="user-info" style="display:none">
+      <button class="dock-profile" id="dock-profile-button">
+        <span class="avatar avatar-me" id="me-avatar">?</span>
+        <span class="dock-name"><strong id="username-display">...</strong><small id="me-status">En ligne</small></span>
+      </button>
+      <button id="notification-button" class="dock-action" title="Notifications">🔔</button>
+      <button id="ui-personalize-inline" class="dock-action" title="Personnaliser">⚙</button>
+      <button id="logout-button" class="dock-action" title="Déconnexion">↪</button>
+    </div>
+  </aside>
+
+  <main class="chat-view">
+    <header class="channel-header">
+      <button id="open-channels" class="icon-button mobile-only">☰</button>
+      <span class="channel-hash">#</span>
+      <div class="channel-title-block"><strong id="current-room-name">général</strong><small id="current-room-topic">Discussion de la communauté</small></div>
+      <div class="channel-header-spacer"></div>
+      <span id="ws-status" class="ws-pill">Connexion…</span>
+      <button id="open-search" class="header-action" title="Rechercher dans ce salon">⌕</button>
+      <button id="open-pins" class="header-action" title="Messages épinglés">📌</button>
+      <button id="open-dm-header" class="header-action" title="Messages privés">✉️</button>
+      <button id="quick-tutor" class="header-action" title="Aide aux devoirs">📚</button>
+      <button id="toggle-members" class="header-action" title="Membres">👥</button>
+    </header>
+
+    <div id="ui-welcome-message" class="discord-welcome" style="display:none"></div>
+    <div id="server-status" class="server-status-hidden">Vérification…</div>
+    <div id="room-selector-container" style="display:none"><select id="room-selector"></select></div>
+
+    <section class="messages-stage">
+      <button id="load-older" class="history-load" hidden>↑ Charger les messages précédents</button>
+      <div id="messages-list" class="messages-list discord-messages" tabindex="0" aria-label="Historique des messages"></div>
+      <div class="message-navigator" aria-label="Navigation dans les messages">
+        <button id="jump-first" title="Tout en haut">⇡</button>
+        <button id="jump-previous" title="Message précédent">↑</button>
+        <button id="jump-next" title="Message suivant">↓</button>
+        <button id="jump-latest" title="Tout en bas">⇣</button>
+      </div>
+      <button id="scroll-latest" class="scroll-latest" hidden>↓ Revenir en bas</button>
+    </section>
+
+    <div class="composer-wrap">
+      <div id="reply-composer-bar" class="reply-composer-bar" hidden><div><small>Répondre à</small><strong id="reply-composer-user">—</strong><span id="reply-composer-preview"></span></div><button id="cancel-reply" type="button">×</button></div>
+      <form id="message-form" class="discord-composer">
+        <button type="button" class="composer-plus" id="composer-plus" title="Commandes">＋</button>
+        <button type="button" id="file-button" class="composer-icon" title="Envoyer un fichier">📎</button>
+        <input id="file-input" type="file" hidden accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.md,.csv,.docx,.xlsx,.pptx,.odt,.ods,.odp,.zip">
+        <input id="message-input" placeholder="Envoyer un message dans #général" maxlength="2000" autocomplete="off" required>
+        <button type="button" id="emoji-button" class="composer-icon" title="Réaction rapide">☺</button>
+        <button type="submit" class="send-button" id="message-send-button" aria-label="Envoyer le message">➤</button>
+      </form>
+      <div class="composer-hint"><span id="composer-send-status" class="composer-send-status">Connexion au chat…</span><span>•</span><span id="typing-hint">Entrée pour envoyer</span><span id="file-status" class="file-status"></span><span>•</span><span>/games pour jouer</span><span>•</span><span>🐍 PiCode : 5 PyCoins</span><span>•</span><span>@PiAI pour l'IA</span></div>
+    </div>
+  </main>
+
+  <aside class="member-panel" id="member-panel">
+    <header class="member-header"><strong>Membres</strong><button id="close-members" class="icon-button mobile-only">×</button></header>
+    <div id="member-list" class="member-list"></div>
+  </aside>
+</div>
+
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav" style="display:none">
+  <button data-mobile="channels">☰<span>Salons</span></button>
+  <button data-mobile="chat" class="active">💬<span>Chat</span></button>
+  <button data-mobile="tutor">📚<span>Devoirs</span></button>
+  <button data-mobile="profile">👤<span>Profil</span></button>
+</nav>
+
+<!-- Modale aide / commandes -->
+<div class="modal-backdrop" id="help-modal">
+  <section class="discord-modal wide-modal">
+    <header><div><span class="eyebrow">PICHAT 3.1</span><h2>Commandes & raccourcis</h2></div><button class="modal-close">×</button></header>
+    <div class="command-grid">
+      <div><kbd>/duel @pseudo</kbd><span>Lancer un combat</span></div>
+      <div><kbd>/roll 20</kbd><span>Lancer un dé</span></div>
+      <div><kbd>/coin</kbd><span>Pile ou face</span></div>
+      <div><kbd>/rps pierre</kbd><span>Pierre-feuille-ciseaux</span></div>
+      <div><kbd>/8ball question</kbd><span>Boule magique</span></div>
+      <div><kbd>/choose A | B</kbd><span>Choix aléatoire</span></div>
+      <div><kbd>/poll Question | A | B</kbd><span>Sondage par réactions</span></div>
+      <div><kbd>/stats</kbd><span>Carte XP / niveau</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- Modale Arcade 2.1.3 -->
+<div class="modal-backdrop" id="games-modal">
+  <section class="discord-modal ultra-wide-modal arcade-modal">
+    <header><div><span class="eyebrow">PICHAT ARCADE 2.1.3</span><h2>Mini-jeux & Pack Défis</h2><p>Joue, améliore tes records, gagne des badges et relève le défi du jour.</p></div><button class="modal-close">×</button></header>
+    <div class="arcade-layout">
+      <aside class="arcade-catalog-column">
+        <div class="arcade-section-title"><strong>Jeux disponibles</strong><small>Choisis une carte pour commencer.</small></div>
+        <div id="arcade-game-list" class="arcade-game-list"><p class="muted">Chargement…</p></div>
+        <details class="arcade-chat-games"><summary>Jeux rapides dans le chat</summary><div class="arcade-chat-buttons">
+          <button data-game-command="/roll 20">🎲 D20</button><button data-game-command="/coin">🪙 Pile / Face</button><button data-prefill="/rps pierre">✋ Pierre-feuille-ciseaux</button><button data-prefill="/8ball Ta question">🎱 Boule magique</button><button data-prefill="/choose A | B">🎯 Choix</button><button data-prefill="/poll Question | A | B">📊 Sondage</button>
+        </div></details>
+      </aside>
+      <main class="arcade-stage-column">
+        <div id="arcade-stage" class="arcade-stage">
+          <div class="arcade-welcome"><span>🕹️</span><h3>Bienvenue dans l’Arcade</h3><p>Sélectionne un mini-jeu à gauche. Les meilleurs scores apparaissent dans le classement.</p></div>
+        </div>
+        <div id="arcade-result" class="arcade-result" aria-live="polite"></div>
+      </main>
+      <aside class="arcade-dashboard-column">
+        <article id="arcade-daily" class="arcade-dashboard-card"><strong>🎯 Défi du jour</strong><p>Chargement…</p></article>
+        <article class="arcade-dashboard-card"><div class="arcade-summary-head"><strong>Mes résultats</strong><button id="arcade-refresh" type="button">↻</button></div><div id="arcade-summary" class="arcade-summary"></div></article>
+        <article class="arcade-dashboard-card"><label>Classement<select id="arcade-leaderboard-game"></select></label><div id="arcade-leaderboard" class="arcade-leaderboard"></div></article>
+      </aside>
+    </div>
+  </section>
+</div>
+
+
+<!-- PiChat 2.1.4 : PiGame Studio -->
+<div class="modal-backdrop" id="game-studio-modal">
+  <section class="discord-modal ultra-wide-modal game-studio-modal">
+    <header><div><span class="eyebrow">PIGAME STUDIO 3.4</span><h2>Crée ou importe ton mini-jeu</h2><p>Génère avec ChatGPT, dépose un fichier ou pars du modèle PiGame prêt à modifier.</p></div><button id="game-studio-close" class="modal-close">×</button></header>
+    <div class="studio-security-note">🔒 Les jeux n'ont pas accès au réseau, aux fichiers, aux cookies ni au stockage du navigateur. Un administrateur valide chaque jeu avant sa publication.</div>
+    <div class="game-studio-tabs">
+      <button class="active" data-studio-tab="create">✨ Créer</button>
+      <button data-studio-tab="public">🎮 Galerie publique</button>
+      <button data-studio-tab="mine">🧰 Mes jeux</button>
+      <button id="studio-pending-tab" data-studio-tab="pending" hidden>🛡 À valider</button>
+    </div>
+    <section class="studio-panel active" data-studio-panel="create">
+      <div class="studio-create-grid">
+        <article class="studio-card">
+          <span class="studio-mode-badge">MODE CHATGPT.COM</span>
+          <h3>1. Décris ton jeu</h3>
+          <label>Titre facultatif<input id="studio-title" maxlength="80" placeholder="Ex. Course spatiale"></label>
+          <label>Idée du jeu<textarea id="studio-idea" rows="7" maxlength="3000" placeholder="Ex. Un jeu tactile où un vaisseau évite des astéroïdes, avec trois vies, un score et un bouton Rejouer."></textarea></label>
+          <div class="studio-actions"><button id="studio-open-chatgpt" class="studio-primary" type="button">Copier le prompt et ouvrir ChatGPT ↗</button><button id="studio-api-generate" class="studio-secondary" type="button" hidden>⚡ Générer automatiquement</button></div>
+          <small id="studio-api-note" class="studio-api-note"></small>
+        </article>
+        <article class="studio-card">
+          <h3>2. Récupère le jeu</h3>
+          <ol class="studio-guide"><li>Colle le prompt dans <strong>ChatGPT.com</strong>.</li><li>Attends sa réponse JSON.</li><li>Copie toute la réponse et colle-la ci-dessous.</li></ol>
+          <label>Prompt spécial<textarea id="studio-special-prompt" class="code-output" rows="5" readonly placeholder="Le prompt apparaîtra ici."></textarea></label>
+          <div class="studio-actions"><button id="studio-copy-prompt" class="studio-secondary" type="button">📋 Copier de nouveau</button><a class="studio-secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Ouvrir ChatGPT manuellement ↗</a></div>
+          <label>Réponse de ChatGPT<textarea id="studio-chatgpt-answer" class="code-output" rows="9" maxlength="120000" placeholder="Colle ici le bloc JSON généré par ChatGPT…"></textarea></label>
+          <button id="studio-import" class="studio-primary" type="button">🔍 Vérifier et importer le jeu</button>
+        </article>
+        <article class="studio-card studio-upload-card">
+          <div class="studio-upload-heading"><div><span class="studio-mode-badge">IMPORT FACILE</span><h3>3. Dépose directement ton jeu</h3><p>Formats acceptés : <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, <strong>JSON PiGame</strong> ou <strong>ZIP</strong> avec index.html, style.css et game.js.</p></div><a id="studio-template" class="studio-secondary" href="/api/game-studio/template">⬇ Télécharger le modèle ZIP</a></div>
+          <input id="studio-file-input" type="file" accept=".html,.htm,.css,.js,.json,.zip,text/html,text/css,text/javascript,application/javascript,application/json,application/zip" hidden>
+          <button id="studio-drop-zone" class="studio-drop-zone" type="button"><span>📦</span><strong>Glisse ton jeu ici</strong><small>ou clique pour choisir un fichier de 2 Mo maximum</small></button>
+          <div class="studio-upload-actions"><span id="studio-file-name">Aucun fichier choisi</span><button id="studio-file-import" class="studio-primary" type="button" disabled>Importer le fichier</button></div>
+        </article>
+      </div>
+    </section>
+    <section class="studio-panel" data-studio-panel="public"><div id="game-studio-public-list" class="studio-list"></div></section>
+    <section class="studio-panel" data-studio-panel="mine"><div id="game-studio-my-list" class="studio-list"></div></section>
+    <section class="studio-panel" data-studio-panel="pending"><div id="game-studio-pending-list" class="studio-list"></div></section>
+    <div id="game-studio-status" class="game-studio-status" aria-live="polite"></div>
+  </section>
+</div>
+<div id="game-studio-player" class="game-studio-player" aria-hidden="true">
+  <header><strong id="game-studio-player-title">🎮 Mini-jeu</strong><button id="game-studio-reload" type="button">↻ Rejouer</button><button id="game-studio-stop" type="button">■ Arrêter</button><button id="game-studio-player-close" type="button">× Fermer</button></header>
+  <iframe id="game-studio-frame" class="game-studio-frame" title="Mini-jeu PiGame Studio" sandbox="allow-scripts"></iframe>
+</div>
+
+<!-- Modale PiTutor+ -->
+<div class="modal-backdrop" id="tutor-modal">
+  <section class="discord-modal wide-modal tutor-plus-modal">
+    <header><div><span class="eyebrow">PI TUTOR+ 2.1 ✦</span><h2>Apprendre, réviser et s'entraîner</h2><p>Indice, méthode, quiz, flashcards, fiches et exercices similaires.</p></div><button class="modal-close">×</button></header>
+    <div class="tutor-plus-layout">
+      <div class="tutor-main-column">
+        <div class="ai-disclosure">🤖 PiTutor peut se tromper. Vérifie les points importants avec ton cours ou ton enseignant.</div>
+        <div class="tutor-grid">
+          <label>Matière<select id="tutor-subject"><option>Mathématiques</option><option>Français</option><option>Histoire-Géo</option><option>SVT</option><option>Physique-Chimie</option><option>Anglais</option><option>Technologie</option><option>Général</option></select></label>
+          <label>Mode<select id="tutor-mode"><option value="hint">💡 Indice progressif</option><option value="method">🧭 Méthode pas à pas</option><option value="explain">📖 Explication du cours</option><option value="check">✅ Vérifier ma réponse</option><option value="quiz">🎯 Créer un quiz</option><option value="flashcards">🃏 Créer des flashcards</option><option value="revision">📝 Fiche de révision</option><option value="similar">🔁 Exercice similaire</option></select></label>
+          <label>Difficulté<select id="tutor-difficulty"><option>adaptée</option><option>facile</option><option>moyenne</option><option>difficile</option></select></label>
+          <label>Nombre d'éléments<input id="tutor-count" type="number" min="2" max="20" value="5"></label>
+        </div>
+        <label>Exercice ou sujet<textarea id="tutor-prompt" rows="6" placeholder="Colle l'énoncé ou indique le thème à réviser…"></textarea></label>
+        <label id="student-answer-wrap" style="display:none">Ma réponse<textarea id="tutor-student-answer" rows="4" placeholder="Écris ce que tu as déjà essayé…"></textarea></label>
+        <p class="tutor-privacy">Évite les données personnelles. PiTutor aide à comprendre ; il ne remplace pas ton professeur.</p>
+        <div class="tutor-actions"><button id="tutor-send" class="primary-button">✦ Demander à PiTutor+</button><button id="tutor-save-set" class="secondary-button" type="button" hidden>💾 Enregistrer comme fiche</button></div>
+        <div id="tutor-loading" class="tutor-loading" hidden>PiTutor prépare une réponse adaptée…</div>
+        <article id="tutor-answer" class="tutor-answer" hidden></article>
+      </div>
+      <aside class="tutor-side-column">
+        <div class="tutor-dashboard" id="tutor-dashboard"><strong>Progression</strong><p>Chargement…</p></div>
+        <div class="tutor-side-head"><strong>Mes fiches</strong><button id="tutor-refresh-sets" type="button">↻</button></div>
+        <div id="tutor-study-sets" class="tutor-study-sets"></div>
+        <details><summary>Historique récent</summary><div id="tutor-history" class="tutor-history"></div></details>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- Modale profil -->
+<div class="modal-backdrop" id="profile-modal">
+  <section class="discord-modal ultra-wide-modal gaming-profile-modal">
+    <header><div><span class="eyebrow">PROFIL & JEUX</span><h2>Mon identité PiChat</h2><p>Pas besoin d’image JPG : ton avatar utilise tes initiales, ta couleur et tes badges.</p></div><button class="modal-close">×</button></header>
+    <div class="gaming-profile-layout">
+      <div class="gaming-profile-main">
+        <div class="profile-card-preview"><span class="avatar avatar-xl" id="profile-preview-avatar">?</span><div><h3 id="profile-preview-name">Utilisateur</h3><span id="profile-preview-role" class="profile-role-chip">MEMBRE</span></div></div>
+        <label>Statut<input id="profile-status" maxlength="120" placeholder="En cours de maths…"></label>
+        <label>Bio<textarea id="profile-bio" rows="3" maxlength="280" placeholder="Quelques mots sur toi…"></textarea></label>
+        <div class="tutor-grid"><label>Couleur de profil<input id="profile-color" type="color" value="#5865f2"></label><label>Visibilité du grade<select id="grade-visibility"><option value="full">Complet — ADMIN / MODO / JOUEUR</option><option value="subtle">Discret — STAFF / MEMBRE</option><option value="hidden">Masqué dans le chat</option></select></label></div>
+        <div class="profile-stats" id="profile-stats"></div>
+        <section class="profile-badge-section"><div class="profile-section-head"><div><span class="eyebrow">BADGES</span><h3>Mes badges</h3></div><small>Les badges automatiques et ceux donnés par un admin apparaissent ici.</small></div><div id="profile-badges" class="profile-badge-list"></div></section>
+      </div>
+      <aside class="gaming-identities-editor">
+        <div class="profile-section-head"><div><span class="eyebrow">PROFILS GAMING</span><h3>Mes pseudos de jeux</h3></div><small>Maximum 12 jeux. Tu peux masquer chaque pseudo sur ton profil public.</small></div>
+        <div id="gaming-profile-list" class="gaming-profile-list"></div>
+        <button id="add-custom-game" class="secondary-button" type="button">＋ Ajouter un autre jeu</button>
+      </aside>
+    </div>
+    <div class="gaming-profile-savebar"><span id="gaming-profile-status" class="muted"></span><button id="save-profile" class="primary-button">Enregistrer le profil et les jeux</button></div>
+  </section>
+</div>
+
+<div class="modal-backdrop pwa-modal" id="pwa-modal">
+  <section class="discord-modal wide-modal">
+    <header><div><span class="eyebrow">PICHAT 2.1 · PWA</span><h2>Application & notifications</h2><p>Installe PiChat comme une vraie application et choisis les alertes utiles.</p></div><button id="pwa-modal-close" class="modal-close">×</button></header>
+    <div class="pwa-settings-list">
+      <article class="pwa-setting-card"><strong>📲 Installer PiChat</strong><p>Ajoute une icône dans le Dock ou sur l’écran d’accueil. PiChat s’ouvrira en plein écran, comme une application.</p><div class="pwa-setting-row"><button id="pwa-install-action" class="pwa-primary">Installer / voir les instructions</button></div><div id="pwa-platform-help" class="pwa-ios-help"></div></article>
+      <article class="pwa-setting-card"><strong>🔔 Notifications</strong><p><span id="pwa-notification-status" class="pwa-status-dot"></span> État : <b id="pwa-notification-label">À vérifier</b></p><div class="pwa-setting-row"><button id="pwa-enable-notifications" class="pwa-primary">Autoriser les notifications</button><select id="pwa-notification-mode"><option value="mentions">Seulement les mentions @moi</option><option value="all">Tous les nouveaux messages</option><option value="off">Aucune notification</option></select></div><div class="pwa-setting-row"><label><input id="pwa-preview-toggle" type="checkbox"> Afficher un aperçu du message</label><label><input id="pwa-sound-toggle" type="checkbox"> Autoriser le son du système</label></div></article>
+      <article class="pwa-setting-card"><strong>📴 Mode hors connexion</strong><p>L’interface et le guide restent accessibles. Les messages nécessitent que le Mac serveur soit allumé et joignable.</p></article>
+      <article class="pwa-setting-card"><strong>🔢 Messages non lus</strong><p>PiChat affiche un compteur par salon, dans le titre de la fenêtre et sur l’icône de l’application quand le système le permet.</p></article>
+    </div>
+  </section>
+</div>
+<div id="pwa-toast" class="pwa-toast"></div>
+
+
+<!-- PiChat 1.1.3 : PyCoins et serveurs personnels -->
+<div class="modal-backdrop" id="economy-modal">
+  <section class="discord-modal wide-modal economy-modal">
+    <header><div><span class="eyebrow">PICHAT ÉCONOMIE</span><h2>PyCoins & serveurs personnels</h2><p>Bonus quotidien, transferts, codes promo et serveurs personnels.</p></div><button class="modal-close">×</button></header>
+    <div class="wallet-hero"><div><small>SOLDE</small><strong id="pycoin-balance">—</strong><span>PyCoins</span></div><button id="claim-daily" class="primary-button">🎁 Bonus quotidien +25</button></div>
+    <div class="economy-grid">
+      <article><h3>Envoyer des PyCoins</h3><form id="pycoin-transfer-form" class="stack-form"><input id="pycoin-recipient" placeholder="Pseudo" maxlength="32" required><input id="pycoin-amount" type="number" min="1" max="500" value="10" required><button>Envoyer</button></form></article>
+      <article><h3>Créer un serveur · 100 PyCoins</h3><form id="custom-server-form" class="stack-form"><div class="inline-form"><input id="custom-server-icon" value="💬" maxlength="8"><input id="custom-server-name" placeholder="Nom du serveur" maxlength="40" required></div><textarea id="custom-server-description" placeholder="Description" maxlength="160"></textarea><button>Créer mon serveur</button></form></article>
+      <article><h3>Rejoindre avec un code</h3><form id="join-server-form" class="inline-form"><input id="join-server-code" placeholder="CODE" maxlength="20" required><button>Rejoindre</button></form><p class="muted">Le propriétaire trouve le code dans la liste ci-dessous.</p></article><article><h3>Utiliser un code promo</h3><form id="pycoin-promo-form" class="inline-form"><input id="pycoin-promo-code" placeholder="CADEAU100" maxlength="24" required><button>Valider</button></form><p class="muted">Chaque code ne fonctionne qu’une fois par compte.</p></article>
+    </div>
+    <h3>Mes serveurs</h3><div id="custom-server-list" class="custom-server-list"></div>
+    <details class="wallet-history"><summary>Historique des PyCoins</summary><div id="pycoin-transactions"></div></details>
+  </section>
+</div>
+
+<!-- PiChat 1.1.3 : PiCode IA -->
+<div class="modal-backdrop" id="code-lab-modal">
+  <section class="discord-modal wide-modal code-lab-modal">
+    <header><div><span class="eyebrow">PICODE ✦</span><h2>Créer un mini-code Python</h2><p>Décris ton idée : PiCode publie une carte copiable dans le salon actuel.</p></div><button class="modal-close">×</button></header>
+    <div class="code-safety">🔒 Le code est analysé avant publication et <strong>n’est jamais exécuté automatiquement</strong>. Réseau, fichiers, commandes système, eval/exec et imports dangereux sont refusés.</div>
+    <form id="code-lab-form" class="stack-form"><input id="code-lab-title" placeholder="Titre, ex. Mini calculatrice" maxlength="80"><textarea id="code-lab-prompt" rows="7" maxlength="2000" placeholder="Exemple : crée un petit quiz Python avec 5 questions de maths niveau 5e" required></textarea><div class="code-lab-actions"><span>Coût : <strong id="code-lab-cost">5 PyCoins</strong></span><button id="code-lab-submit" class="primary-button">🐍 Générer dans le chat</button></div></form>
+    <div id="code-lab-status" class="muted"></div>
+  </section>
+</div>
+
+<!-- PiChat 2.1 : messages privés -->
+<div class="modal-backdrop" id="dm-modal">
+  <section class="discord-modal ultra-wide-modal dm-modal-card">
+    <header><div><span class="eyebrow">MESSAGES PRIVÉS</span><h2>Conversations</h2><p>Discute avec les membres qui partagent un espace avec toi.</p></div><button class="modal-close">×</button></header>
+    <div class="dm-layout">
+      <aside class="dm-sidebar"><input id="dm-user-search" placeholder="Rechercher un membre…"><div id="dm-conversations" class="dm-conversations"></div><details><summary>Nouvelle conversation</summary><div id="dm-user-list" class="dm-user-list"></div></details></aside>
+      <main class="dm-chat"><div id="dm-empty" class="dm-empty">Choisis une conversation.</div><div id="dm-active" hidden><header class="dm-active-header"><span class="avatar" id="dm-active-avatar">?</span><div><strong id="dm-active-name">—</strong><small id="dm-active-status"></small></div></header><div id="dm-message-list" class="dm-message-list"></div><div id="dm-reply-bar" class="reply-composer-bar" hidden><div><small>Répondre à</small><strong id="dm-reply-user">—</strong><span id="dm-reply-preview"></span></div><button id="dm-cancel-reply">×</button></div><form id="dm-form" class="dm-composer"><input id="dm-input" maxlength="2000" placeholder="Message privé…" required><button>➤</button></form></div></main>
+    </div>
+  </section>
+</div>
+
+<!-- PiChat 2.1 : recherche -->
+<div class="modal-backdrop" id="search-modal">
+  <section class="discord-modal wide-modal"><header><div><span class="eyebrow">RECHERCHE</span><h2>Retrouver un message</h2></div><button class="modal-close">×</button></header><form id="message-search-form" class="search-form"><input id="message-search-input" minlength="2" placeholder="Texte à rechercher…" required><input id="message-search-author" placeholder="Auteur facultatif"><button>Rechercher</button></form><div id="message-search-results" class="search-results"></div></section>
+</div>
+
+<!-- PiChat 2.1 : épingles -->
+<div class="modal-backdrop" id="pins-modal">
+  <section class="discord-modal wide-modal"><header><div><span class="eyebrow">ÉPINGLES</span><h2>Messages importants</h2></div><button class="modal-close">×</button></header><div id="pinned-message-list" class="search-results"></div></section>
+</div>
+
+<div id="debug-panel" class="debug-panel" style="display:none"><button id="debug-toggle" class="debug-toggle">▾ Diagnostic</button><div id="debug-content" class="debug-content"><pre id="debug-log">Chargement…</pre></div></div>
+
+<script src="/js/app.js?v=3200"></script>
+<script src="/js/pwa.js?v=3200"></script>
+<script src="/js/websocket.js?v=3200"></script>
+<script src="/js/gaming_profiles.js?v=3200"></script>
+<script src="/js/arcade.js?v=3200"></script>
+<script src="/js/game_studio.js?v=3200"></script>
+<script src="/js/community.js?v=3200"></script>
+<script src="/js/debug.js?v=3200"></script>
+<script src="/js/ui_settings.js?v=3200"></script>
+<script src="/js/trolls.js?v=3200"></script>
+<script src="/js/discord104.js?v=3200"></script>
+<script src="/js/mobile112.js?v=3200"></script>
+<script src="/js/economy113.js?v=3200"></script>
+<script src="/js/spaces_switcher_v2.js?v=3200"></script>
+<script src="/js/v21.js?v=3200"></script>
+<script src="/js/final_packs.js?v=3200"></script>
+<script src="/js/pro31.js?v=3200"></script>
+</body>
+</html>

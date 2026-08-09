@@ -1,0 +1,16 @@
+MISE À JOUR PICHAT 2.4.0 PRO — MAC
+
+1. Arrêter PiChat avec Ctrl+C.
+2. Sauvegarder :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+3. Décompresser PiChat_v2.4.0_Mac_PRO.zip dans ~/Downloads.
+4. Réparer :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+5. Relancer :
+   python3 pichat.py network
+6. Ouvrir http://localhost:8000/admin#pro
+7. Faire un rechargement complet si nécessaire : Commande + Maj + R.
+
+La mise à jour ne doit pas remplacer database/pichat.db, .env, runtime/api-vault.json ou les sauvegardes existantes.

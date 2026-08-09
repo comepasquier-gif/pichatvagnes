@@ -1,0 +1,10 @@
+PICHAT 2.1.1 — PACK MODO
+=========================
+
+- Trois packs prêts à l'emploi : Petit modo, Modo normal, Super modo.
+- Sélection en un clic dans l'éditeur de grade admin.
+- Permissions toujours ajustables individuellement.
+- Détection automatique du pack ou affichage Personnalisé.
+- Commandes Terminal et Console admin.
+- Journal admin lors d'un changement de pack.
+- Aucun changement des limites de sécurité par classe.

@@ -1,0 +1,60 @@
+PICHAT 2.1.1 — PACKS DE MODÉRATION
+====================================
+
+LES 3 PACKS
+-----------
+
+PETIT MODO
+  - Voir les signalements de sa classe
+  - Supprimer les messages de sa classe
+  - Envoyer des avertissements
+
+MODO NORMAL
+  - Tout le Petit modo
+  - Résoudre/rejeter les signalements
+  - Mute / dé-mute
+  - Expulsion de session
+  - Ban temporaire
+  - Notes privées
+  - Historique des sanctions
+  - Mode lent de sa classe
+
+SUPER MODO
+  - Toutes les permissions du Modo normal
+  - Ban définitif et déban
+  - Révision des incidents AutoModo
+
+RÈGLE DE SÉCURITÉ
+-----------------
+Tous les packs restent limités à la classe attribuée. Un modo peut parler dans Général mais n'y possède aucun pouvoir de modération. Il ne peut pas sanctionner un admin, un bot ou un autre modo.
+
+DANS L'ADMIN
+------------
+Admin > Utilisateurs > Grade > Modérateur
+1. Choisis la classe.
+2. Clique Petit modo, Modo normal ou Super modo.
+3. Ajuste éventuellement les cases : le pack devient alors Personnalisé.
+4. Enregistre. Le compte est déconnecté pour recharger ses droits.
+
+TERMINAL MAC
+------------
+Voir les packs :
+  cd ~/Downloads/PiChat
+  source venv/bin/activate
+  python set_moderator.py --packs
+
+Petit modo :
+  python set_moderator.py user toto class 5C pack petit
+
+Modo normal :
+  python set_moderator.py user toto class 5C pack normal
+
+Super modo :
+  python set_moderator.py user toto class 5C pack super
+
+CONSOLE ADMIN
+-------------
+  mod-packs
+  mod-pack toto petit 5C
+  mod-pack toto normal 5C
+  mod-pack toto super 5C

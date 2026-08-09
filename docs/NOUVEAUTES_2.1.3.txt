@@ -1,0 +1,24 @@
+PICHAT 2.1.3 — ARCADE & PACK DÉFIS
+
+NOUVEAUX MINI-JEUX
+- Réflexe éclair : clique dès que la zone devient verte.
+- Mémoire express : retrouve six paires.
+- Click Rush : maximum de clics en dix secondes.
+- Nombre mystère : trouve un nombre entre 1 et 100.
+- Quiz express : cinq questions rapides.
+- Morpion contre PiBot.
+
+PACK DÉFIS
+- Défi quotidien déterminé automatiquement.
+- Classement séparé pour chaque mini-jeu.
+- Records et historique personnel.
+- Récompenses limitées en PyCoins et XP.
+- Badges Arcade automatiques.
+- Tableau administrateur avec réglages, statistiques et dernières parties.
+
+SÉCURITÉ ET STABILITÉ
+- Sessions de jeu à durée limitée et rattachées au compte connecté.
+- Validation serveur des scores et des actions importantes.
+- Plafond quotidien pour éviter la création illimitée de PyCoins.
+- Migration automatique depuis PiChat 2.1.2.
+- Compatible avec Python 3.9 sur Mac.

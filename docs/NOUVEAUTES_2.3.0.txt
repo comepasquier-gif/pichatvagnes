@@ -1,0 +1,37 @@
+PICHAT 2.3.0 — API FACILE, IMPORT DE JEUX ET INTERFACE NEO
+
+1. API facile
+- Nouveau panneau Administration > API facile.
+- Collage d'une clé OpenAI sans modifier .env ni utiliser le Terminal.
+- Clé masquée après enregistrement.
+- Stockage local privé dans runtime/api-vault.json avec permissions 600.
+- La clé n'est jamais renvoyée au navigateur.
+- Bouton de test de connexion.
+- Choix du modèle.
+- Activation de PiAI et de la génération directe PiGame Studio depuis le même écran.
+- Suppression de la clé et retour de PiAI en mode local.
+
+2. Import de jeux simplifié
+- Dépôt par glisser-déposer ou sélection de fichier.
+- Formats : JSON PiGame, HTML autonome et ZIP.
+- Modèle ZIP téléchargeable depuis PiGame Studio.
+- Un ZIP simple peut contenir :
+  pichat-game.json
+  index.html
+  style.css
+  game.js
+- Import en brouillon, test dans l'iframe isolée puis envoi en validation.
+- Limite de 2 Mo par fichier, 30 fichiers par ZIP et 3 Mo décompressés.
+- Protection contre les chemins ZIP dangereux et les liens symboliques.
+- Refus des ressources Internet et des API JavaScript sensibles.
+
+3. Interface Neo
+- Nouveau fond, panneaux translucides, ombres et reliefs plus modernes.
+- Boutons et champs plus lisibles.
+- Amélioration du panneau admin, du chat, des modales, de la connexion et de la version mobile.
+- Respect du réglage système « réduire les animations ».
+
+4. Compatibilité
+- Python 3.9 conservé.
+- Base SQLite existante conservée.
+- Aucun pichat.db, .env, api-vault.json ou venv dans le ZIP de mise à jour.

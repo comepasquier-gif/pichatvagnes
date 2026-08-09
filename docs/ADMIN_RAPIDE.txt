@@ -1,0 +1,36 @@
+PICHAT 1.1.0 — ADMIN RAPIDE SUR MAC
+=======================================
+
+1) Ouvre le Terminal.
+
+2) Pour créer l'admin toto avec le mot de passe totototo :
+
+cd ~/Downloads/PiChat
+source venv/bin/activate
+python create_admin.py user toto password totototo
+
+3) Version plus courte :
+
+cd ~/Downloads/PiChat
+source venv/bin/activate
+python create_admin.py toto totototo
+
+4) Version plus sûre (le mot de passe n'apparaît pas dans l'historique) :
+
+cd ~/Downloads/PiChat
+source venv/bin/activate
+python create_admin.py user toto
+
+PiChat demandera alors le mot de passe de manière invisible.
+
+IMPORTANT
+---------
+Un mot de passe écrit directement dans la commande peut rester visible dans
+l'historique du Terminal. Le mode rapide est pratique pour un compte de test.
+Pour un vrai admin, préfère le mode plus sûr.
+
+COMPORTEMENT SI LE COMPTE EXISTE DÉJÀ
+-------------------------------------
+- Avec un mot de passe dans la commande : le compte devient admin et son mot
+  de passe est remplacé par celui indiqué. Ses sessions sont fermées.
+- Sans mot de passe : le compte devient admin et garde son mot de passe actuel.

@@ -1,0 +1,50 @@
+PICHAT 2.1.2 — BADGES & PROFILS GAMING
+========================================
+
+NOUVEAU PROFIL
+--------------
+- Avatar sans fichier JPG : initiales + couleur choisie.
+- Statut et biographie.
+- Vitrine de badges.
+- Pseudos de jeux directement sur le profil.
+
+JEUX PRÉCONFIGURÉS
+------------------
+- Valorant
+- Brawl Stars
+- Roblox
+- Fortnite
+
+L’utilisateur peut également ajouter d’autres jeux, dans la limite de 12 profils de jeu.
+Chaque pseudo peut être affiché publiquement ou gardé privé.
+
+BADGES
+------
+Badges automatiques inclus :
+- Membre
+- Administrateur
+- Modérateur
+- Gamer
+- Multi-gamer
+- Profil complet
+
+L’administrateur peut :
+- créer un badge personnalisé ;
+- choisir son icône et sa couleur ;
+- l’attribuer avec un motif ;
+- le retirer ;
+- désactiver un badge personnalisé ;
+- supprimer un pseudo de jeu inapproprié.
+
+ADMINISTRATION
+--------------
+Page : /admin#badges
+
+Console :
+  badges
+  badge-give PSEUDO CODE [MOTIF]
+  badge-remove PSEUDO CODE
+
+MIGRATION
+---------
+L’ancienne interface PiRPG est désactivée. Ses anciennes tables restent dans la base afin de ne supprimer aucune donnée pendant la mise à jour.

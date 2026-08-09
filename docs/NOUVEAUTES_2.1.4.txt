@@ -1,0 +1,23 @@
+PiChat 2.1.4 — PiGame Studio
+================================
+
+NOUVEAU
+- Création de mini-jeux avec un prompt spécial pour ChatGPT.com.
+- Bouton qui copie le prompt et ouvre https://chatgpt.com/ dans un nouvel onglet.
+- Import de la réponse JSON générée par ChatGPT.
+- Mode automatique facultatif via l'API OpenAI.
+- Brouillons privés, aperçu, envoi en validation et publication par un administrateur.
+- Galerie de jeux publics et compteur de parties.
+- Limite du nombre de jeux par utilisateur.
+
+SÉCURITÉ
+- Validation côté serveur du HTML, du CSS et du JavaScript.
+- Refus des accès réseau, fichiers, cookies, stockage navigateur et fenêtres externes.
+- Refus de eval, Function, workers, WebAssembly et boucles infinies évidentes.
+- Jeu exécuté dans une iframe sandbox avec une politique CSP sans réseau.
+- Validation administrateur activée par défaut avant publication publique.
+
+IMPORTANT
+- PiChat ne pilote pas automatiquement le compte connecté sur ChatGPT.com.
+- En mode ChatGPT.com, l'utilisateur colle manuellement le prompt et récupère la réponse.
+- Le mode API direct nécessite une clé API OpenAI et une facturation API séparée.

@@ -1,0 +1,26 @@
+PICHAT 2.1.4 — PIGAME STUDIO
+
+1. Arrêter PiChat avec Ctrl + C.
+2. Sauvegarder :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+3. Décompresser le ZIP depuis Téléchargements.
+4. Réparer et migrer :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+5. Relancer :
+   python3 pichat.py network
+
+UTILISATION
+- Ouvrir PiChat → PiGame Studio.
+- Décrire le jeu.
+- Cliquer « Copier le prompt et ouvrir ChatGPT ».
+- Coller le prompt dans ChatGPT.com.
+- Copier la réponse JSON complète.
+- La coller dans PiGame Studio puis importer.
+- Tester le brouillon et l'envoyer à l'administrateur.
+
+MODE AUTOMATIQUE
+- Configurer OPENAI_API_KEY dans le fichier .env du Mac.
+- Activer la génération directe dans Administration → PiGame Studio.
+- La facturation API OpenAI est séparée de l'abonnement ChatGPT.

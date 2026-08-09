@@ -1,0 +1,40 @@
+PICHAT 2.1 — HÉBERGEMENT INTERNET
+=================================
+
+PiChat prépare les fichiers nécessaires, mais ne peut pas acheter un domaine,
+ouvrir ton routeur ou configurer ton hébergeur automatiquement.
+
+PRÉREQUIS
+- un domaine ou sous-domaine, par exemple chat.mondomaine.fr ;
+- un Mac/serveur qui reste allumé, ou un hébergeur ;
+- le port 80/443 accessible ;
+- Caddy installé pour le HTTPS automatique ;
+- backups hors du Mac serveur.
+
+PRÉPARATION
+  cd ~/Downloads/PiChat
+  python3 pichat.py prepare-internet https://chat.mondomaine.fr
+
+Cela génère :
+- deployment/Caddyfile
+- deployment/pichat.production.env
+
+LANCEMENT
+Terminal 1 :
+  cd ~/Downloads/PiChat
+  sudo caddy run --config deployment/Caddyfile
+
+Terminal 2 :
+  cd ~/Downloads/PiChat
+  python3 pichat.py internet
+
+ADMIN
+  http://localhost:8000/admin#deployment
+
+SÉCURITÉ CONSEILLÉE
+- compte admin distinct avec mot de passe fort ;
+- HTTPS obligatoire ;
+- inscriptions sur validation pour un établissement ;
+- sauvegardes quotidiennes ;
+- ne jamais exposer directement le port SQLite ou les dossiers backups ;
+- surveiller les journaux et mettre à jour régulièrement le Mac.

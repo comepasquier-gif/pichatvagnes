@@ -1,0 +1,51 @@
+PICHAT 2.2.0 — PACKS FINAUX
+
+Cette version termine les packs restés en attente après PiChat 2.1.5.
+
+1. PACK MESSAGES+
+- Programmer un message dans un salon pour une date et une heure précises.
+- Voir et annuler ses messages en attente.
+- Envoi automatique tant que le Mac et PiChat restent allumés.
+- Contrôle AutoModo et vérification des droits avant programmation.
+- Nouvelle vérification des droits, du ban et du mute au moment de l’envoi.
+- Délai de modification réglable par l’administrateur.
+- Délai de suppression réglable par l’administrateur.
+
+2. PACK SOCIAL
+- Rechercher les membres des établissements partagés.
+- Envoyer, accepter ou refuser une demande d’ami.
+- Retirer un ami.
+- Bloquer ou débloquer un compte.
+- Un blocage coupe aussi les messages privés entre les deux comptes.
+- Les administrateurs ne peuvent pas être bloqués.
+
+3. PACK SESSIONS
+- Voir les appareils actuellement connectés à son compte.
+- Afficher le type d’appareil, l’adresse IP et la dernière activité.
+- Déconnecter une ancienne session.
+- Déconnecter tous les autres appareils en un clic.
+
+4. PACK MAINTENANCE
+- Backups automatiques réglables de 1 à 720 heures.
+- Conservation réglable de 1 à 60 sauvegardes automatiques.
+- Les sauvegardes manuelles ne sont jamais supprimées par la rotation automatique.
+- Bouton administrateur pour créer un backup immédiatement.
+
+5. PACK LABO MIS À JOUR
+Le laboratoire de test crée maintenant aussi :
+- des relations d’amitié ;
+- une demande d’ami en attente ;
+- des sessions d’appareils fictives ;
+- des messages programmés de démonstration.
+
+ADMINISTRATION
+Ouvrir : http://localhost:8000/admin#final-packs
+
+COMMANDES
+  python3 pichat.py packs status
+  python3 pichat.py packs backup
+
+SÉCURITÉ
+- Compatible Python 3.9.
+- Les messages programmés ne contournent ni AutoModo, ni les mutes, ni les changements d’accès.
+- Les sessions n’affichent jamais leur token secret dans l’interface.

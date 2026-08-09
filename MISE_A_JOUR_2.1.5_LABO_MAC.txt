@@ -1,0 +1,34 @@
+PiChat 2.1.5 — Mise à jour Mac
+==============================
+
+Cette version corrige le bouton d'envoi du chat et de PiGame Studio, puis ajoute
+le Pack Labo & Diagnostic pour créer des comptes et données de test.
+
+1. Arrêter PiChat avec Ctrl+C.
+
+2. Sauvegarder :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresser le ZIP depuis Téléchargements :
+   cd ~/Downloads
+   unzip -o PiChat_v2.1.5_Mac_Correctif_Envoi_Labo_Test.zip
+
+4. Réparer et migrer :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Relancer :
+   python3 pichat.py network
+
+6. Ouvrir le laboratoire :
+   http://localhost:8000/admin#test-lab
+
+Créer 20 comptes depuis le Terminal :
+   cd ~/Downloads/PiChat
+   python3 pichat.py test-pack create --accounts 20
+
+Supprimer les lots de test :
+   python3 pichat.py test-pack clean
+
+Le ZIP de mise à jour ne contient ni base pichat.db, ni fichier .env.

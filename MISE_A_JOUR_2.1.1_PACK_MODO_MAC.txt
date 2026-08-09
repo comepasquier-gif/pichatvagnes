@@ -1,0 +1,34 @@
+PICHAT 2.1.1 — MISE À JOUR PACK MODO (MAC)
+================================================
+
+1. Arrête PiChat avec Ctrl + C.
+
+2. Fais un backup :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresse la mise à jour depuis Téléchargements :
+   cd ~/Downloads
+   unzip -o PiChat_v2.1.1_Mac_Pack_Modo.zip
+
+4. Répare/migre :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Relance :
+   python3 pichat.py network
+
+UTILISATION
+-----------
+Admin > Utilisateurs > Grade > Modérateur > choisis un pack.
+
+Terminal :
+  source venv/bin/activate
+  python set_moderator.py --packs
+  python set_moderator.py user toto class 5C pack petit
+  python set_moderator.py user toto class 5C pack normal
+  python set_moderator.py user toto class 5C pack super
+
+Console admin :
+  mod-packs
+  mod-pack toto normal 5C

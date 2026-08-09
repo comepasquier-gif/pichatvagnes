@@ -1,0 +1,14 @@
+PiChat 2.1.1.1 — Correctif Python 3.9
+
+Ce correctif remplace les annotations de type Python 3.10 de la forme
+« int | None » par la syntaxe compatible Python 3.9 « Optional[int] ».
+
+Il corrige l’erreur Pydantic :
+TypeError: Unable to evaluate type annotation 'int | None'.
+
+Installation :
+1. Arrêter PiChat avec Ctrl+C.
+2. Faire un backup.
+3. Décompresser ce ZIP par-dessus le dossier PiChat existant.
+4. Exécuter : python3 pichat.py repair
+5. Relancer : python3 pichat.py network

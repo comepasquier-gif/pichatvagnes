@@ -1,0 +1,35 @@
+PICHAT CLOUD — GUIDE
+====================
+
+A. TEST IMMÉDIAT SANS DOMAINE
+1. Lancer PiChat en réseau.
+2. Ouvrir /admin#deployment.
+3. Installer cloudflared.
+4. Créer une URL HTTPS temporaire.
+5. Copier l’adresse ou scanner le QR code.
+
+B. DOMAINE PERMANENT
+1. Ajouter son domaine à Cloudflare.
+2. Dans le tableau de bord Cloudflare, ouvrir Networking > Tunnels.
+3. Créer un tunnel.
+4. Ajouter un nom d’hôte public, par exemple chat.mondomaine.fr.
+5. Choisir comme service d’origine : http://localhost:8000.
+6. Ouvrir Add a replica et copier le jeton du tunnel.
+7. Dans PiChat Cloud, saisir l’adresse HTTPS et le jeton.
+8. Enregistrer, puis démarrer le domaine.
+
+C. ARRÊTER
+Dans l’administration, cliquer sur Arrêter le tunnel, ou utiliser :
+python3 pichat.py cloud stop
+
+D. DÉMARRER PICHAT ET LE TUNNEL ENSEMBLE
+python3 pichat.py cloud
+
+E. EMPLACEMENTS PRIVÉS
+runtime/cloud/cloudflared          exécutable Cloudflare
+runtime/cloud/tunnel-token.txt     jeton permanent privé
+runtime/cloud/cloudflared.log      journal du tunnel
+runtime/cloud/state.json           état du tunnel
+deployment/pichat.production.env   réglages HTTPS PiChat
+
+Ne jamais envoyer le contenu de runtime/cloud/tunnel-token.txt.

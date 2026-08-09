@@ -1,0 +1,45 @@
+PICHAT 1.1.0 — HTTPS LOCAL OPTIONNEL POUR TÉLÉPHONE
+===================================================
+
+Cette partie est OPTIONNELLE. Elle sert uniquement à tester les fonctions PWA
+avancées sur un téléphone du même Wi-Fi. Elle demande Homebrew et l'installation
+d'un certificat de confiance sur le téléphone.
+
+1) INSTALLER MKCERT
+-------------------
+brew install mkcert
+mkcert -install
+
+2) CRÉER LE CERTIFICAT POUR LE MAC ET SON IP
+--------------------------------------------
+cd ~/Downloads/PiChat
+mkdir -p certificates
+cd certificates
+IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1)
+mkcert localhost 127.0.0.1 ::1 "$IP" pichat.test
+ls -lh
+
+Repérer les deux fichiers créés : un certificat .pem et une clé -key.pem.
+
+3) LANCER EN HTTPS
+------------------
+cd ~/Downloads/PiChat
+source venv/bin/activate
+cd backend
+IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1)
+CERT=$(find ../certificates -maxdepth 1 -name '*.pem' ! -name '*-key.pem' | head -1)
+KEY=$(find ../certificates -maxdepth 1 -name '*-key.pem' | head -1)
+python -m uvicorn main:app --host 0.0.0.0 --port 8443 --ssl-certfile "$CERT" --ssl-keyfile "$KEY"
+
+Adresse : https://ADRESSE_IP_DU_MAC:8443
+
+4) FAIRE CONFIANCE AU CERTIFICAT SUR IPHONE/IPAD
+------------------------------------------------
+La racine locale est indiquée par :
+mkcert -CAROOT
+
+Il faut transférer rootCA.pem sur l'appareil, installer le profil puis activer
+la confiance complète dans Réglages > Général > Informations > Réglages de
+confiance des certificats.
+
+Ne partage jamais la clé privée rootCA-key.pem.

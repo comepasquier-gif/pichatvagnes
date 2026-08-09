@@ -1,0 +1,25 @@
+MISE À JOUR PICHAT 2.1.2 — MAC
+================================
+
+1. Arrêter PiChat dans son Terminal avec Ctrl + C.
+
+2. Créer un backup :
+
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+
+3. Décompresser la version 2.1.2 par-dessus l’installation :
+
+   cd ~/Downloads
+   unzip -o PiChat_v2.1.2_Mac_Badges_Profils_Gaming.zip
+
+4. Réparer et migrer :
+
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+
+5. Relancer :
+
+   python3 pichat.py network
+
+Le ZIP ne contient pas de base pichat.db et ne remplace pas les comptes, messages ou fichiers envoyés.

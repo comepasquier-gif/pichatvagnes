@@ -1,0 +1,15 @@
+PiChat 3.1.0 PRO Online — Mise à jour Mac
+========================================
+
+1. Arrêter PiChat avec Ctrl+C.
+2. Sauvegarde :
+   cd ~/Downloads/PiChat
+   python3 pichat.py backup
+3. Décompresser le ZIP 3.1 dans ~/Downloads.
+4. Réparer / migrer :
+   cd ~/Downloads/PiChat
+   python3 pichat.py repair
+5. Lancer :
+   python3 pichat.py network
+6. Ouvrir http://localhost:8000/admin#launch31
+7. Cliquer « Backup + préflight » avant une mise en ligne publique.

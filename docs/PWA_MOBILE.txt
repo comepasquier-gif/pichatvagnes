@@ -1,0 +1,42 @@
+PICHAT 1.1.0 — INSTALLATION COMME APPLICATION
+==============================================
+
+1) LANCER SUR LE MAC
+--------------------
+cd ~/Downloads/PiChat
+source venv/bin/activate
+cd backend
+python -m uvicorn main:app --host 127.0.0.1 --port 8000
+
+Ouvrir : http://localhost:8000
+
+2) INSTALLER SUR LE MAC
+-----------------------
+Dans PiChat, cliquer sur le bouton ⬇ dans la barre de gauche.
+
+Dans Safari :
+Fichier > Ajouter au Dock
+
+Dans Chrome/Edge :
+cliquer sur l'icône d'installation dans la barre d'adresse.
+
+3) ACTIVER LES NOTIFICATIONS
+----------------------------
+Dans PiChat : bouton 🔔 > Autoriser les notifications.
+Choisir :
+- mentions uniquement ;
+- tous les messages ;
+- désactivées.
+
+4) TÉLÉPHONE SUR LE MÊME WI-FI
+------------------------------
+cd ~/Downloads/PiChat
+source venv/bin/activate
+cd backend
+IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1)
+echo "Adresse téléphone : http://$IP:8000"
+python -m uvicorn main:app --host 0.0.0.0 --port 8000
+
+L'interface mobile fonctionne avec cette adresse.
+Pour les notifications PWA complètes sur téléphone, HTTPS peut être nécessaire.
+Voir HTTPS_MOBILE_OPTIONNEL.txt.

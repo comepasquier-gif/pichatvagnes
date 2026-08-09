@@ -1,0 +1,1 @@
+"""Versioned PiChat database migrations."""

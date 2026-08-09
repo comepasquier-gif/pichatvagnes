@@ -1,0 +1,49 @@
+PICHAT 2.1.0 — ULTIMATE MAC
+===========================
+
+Cette version regroupe directement toute la feuille de route :
+
+INSTALLATION / RÉPARATION
+- centre de gestion unique : python3 pichat.py ...
+- installation, réparation, reconstruction du venv, diagnostic et migration
+- mise à jour depuis un ZIP avec backup automatique et conservation des données
+
+PWA / MOBILE
+- application installable sans changer d’icône à chaque mise à jour
+- service worker 2.1 et actualisation transparente
+- notifications, non-lus, brouillons par salon et mode hors connexion
+- interface mobile avec tiroirs et grandes zones tactiles
+
+MESSAGERIE 2.1
+- messages privés entre membres d’un même espace
+- réponses aux messages publics et privés
+- modification et suppression
+- recherche dans les salons
+- messages épinglés
+- événements temps réel
+
+MODÉRATION
+- signalements, AutoModo, sanctions progressives et permissions par modo
+- mute, expulsions, bans temporaires, notes et historique
+- filtres anti-spam configurables et suppression/épingle par permissions
+
+PITUTOR+
+- indice, méthode, explication, vérification, quiz, flashcards et révision
+- fiches enregistrées, historique, favoris, progression et tentatives
+
+PIRPG
+- classes Aventurier, Mage, Gardien et Éclaireur
+- statistiques, énergie, inventaire, équipement et consommables
+- quêtes, bonus quotidien, boutique PyCoins, classement et boss collectif
+- duels améliorés : défense, attaque spéciale, énergie et bonus de classe
+
+MULTI-ÉTABLISSEMENTS / INTERNET
+- plusieurs espaces avec rôles et invitations
+- panneau Admin > Internet
+- génération de Caddyfile et environnement production
+- démarrage reverse proxy avec python3 pichat.py internet
+
+IMPORTANT
+- Un simple Mac sur le Wi-Fi n’est pas automatiquement accessible depuis Internet.
+- Pour une vraie URL publique : domaine, HTTPS, Caddy et accès réseau/hébergement sont nécessaires.
+- Fais toujours un backup avant une mise à jour majeure.
