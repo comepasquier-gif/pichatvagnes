@@ -1,13 +1,14 @@
 services:
   - type: web
-    name: pichat-free-online
+    name: pichat-free-online-eu
     runtime: docker
     plan: free
+    region: frankfurt
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: pichat-db
+          name: pichat-db-eu
           property: connectionString
       - key: PICHAT_SECRET_KEY
         generateValue: true
@@ -25,7 +26,8 @@ services:
         value: approval
 
 databases:
-  - name: pichat-db
+  - name: pichat-db-eu
     plan: free
+    region: frankfurt
     databaseName: pichat
     user: pichat
