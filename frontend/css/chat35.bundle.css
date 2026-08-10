@@ -835,3 +835,167 @@ body.d104-auth .switch-link{text-align:center!important;color:var(--p35-muted)!i
 @media(max-width:860px){body.d104-auth .auth-layout{grid-template-columns:1fr!important}body.d104-auth .auth-visual{display:none!important}body.d104-auth .auth-side{padding:18px!important}body.d104-auth .auth-card{padding:24px!important}.channel-header .p35-perf-mode{display:none}#p35-mini-bot{width:62px;height:62px;right:12px;bottom:76px;transform:scale(.9);transform-origin:bottom right}.p35-bot-tip{right:12px;bottom:140px}.p35-ping-floating{top:8px;right:8px}.p35-ping-pill{height:27px!important;padding:0 8px!important;font-size:.68rem!important}}
 @media(prefers-reduced-motion:reduce){#p35-mini-bot,.p35-bot-head{animation:none!important;transition:none!important}}
 
+
+
+/* =========================================================
+   PiChat 3.5.1 — HEADER / BARRE D'OUTILS RESPONSIVE
+   Corrige le chevauchement du titre, les doublons et le ping.
+   ========================================================= */
+.chat-view{
+  container-type:inline-size;
+}
+
+.channel-header{
+  overflow:hidden;
+  gap:6px!important;
+}
+
+.channel-header-spacer{
+  display:none!important;
+}
+
+.channel-title-block{
+  flex:1 1 260px!important;
+  min-width:110px!important;
+  max-width:none!important;
+  overflow:hidden!important;
+}
+
+.channel-title-block strong{
+  min-width:0;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.channel-title-block small{
+  min-width:0;
+  max-width:260px;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* Discord 1.0.4 fournit déjà la nouvelle recherche : on masque l'ancienne. */
+#open-search{
+  display:none!important;
+}
+
+#d104-quick-switcher,
+#d104-search-trigger,
+.channel-header > .header-action,
+.channel-header > .icon-button,
+.channel-header > .ws-pill,
+.channel-header > .p35-ping-pill{
+  flex:0 0 auto!important;
+}
+
+.discord-search-trigger{
+  flex:0 1 180px!important;
+  width:auto!important;
+  max-width:180px!important;
+}
+
+.p35-ping-pill{
+  max-width:190px;
+  overflow:hidden;
+}
+
+/* On s'adapte à la largeur DE LA ZONE CHAT, pas à celle du navigateur. */
+@container (max-width: 980px){
+  .channel-title-block small{
+    display:none!important;
+  }
+
+  #d104-quick-switcher,
+  .channel-header > .header-action.hide-mobile{
+    display:none!important;
+  }
+
+  .discord-search-trigger{
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+    max-width:36px!important;
+    padding:0!important;
+    justify-content:center!important;
+    font-size:0!important;
+  }
+
+  .discord-search-trigger::before{
+    content:"⌕";
+    font-size:20px;
+    line-height:1;
+  }
+
+  .discord-search-trigger kbd{
+    display:none!important;
+  }
+
+  .channel-header .p35-perf-mode{
+    display:none!important;
+  }
+}
+
+@container (max-width: 760px){
+  .channel-hash{
+    display:none!important;
+  }
+
+  .channel-title-block{
+    flex-basis:140px!important;
+  }
+
+  .ws-pill{
+    width:30px!important;
+    min-width:30px!important;
+    padding:0!important;
+    justify-content:center!important;
+    font-size:0!important;
+  }
+
+  .ws-pill::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#80848e;
+  }
+
+  .ws-pill.connected::before{
+    background:#57f287;
+    box-shadow:0 0 9px rgba(87,242,135,.55);
+  }
+
+  .ws-pill.disconnected::before{
+    background:#ed4245;
+    box-shadow:0 0 9px rgba(237,66,69,.45);
+  }
+
+  .p35-ping-pill{
+    min-width:62px!important;
+    max-width:78px!important;
+    padding:0 8px!important;
+  }
+
+  #quick-tutor{
+    display:none!important;
+  }
+}
+
+@container (max-width: 590px){
+  .channel-header{
+    padding-left:7px!important;
+    padding-right:7px!important;
+    gap:4px!important;
+  }
+
+  .channel-title-block{
+    min-width:72px!important;
+  }
+
+  .channel-header > #open-pins{
+    display:none!important;
+  }
+}
+

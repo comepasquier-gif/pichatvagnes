@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: pichat-free-online-eu
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pichat-db-eu
+          property: connectionString
+      - key: PICHAT_SECRET_KEY
+        generateValue: true
+      - key: PICHAT_STORAGE_BACKEND
+        value: database
+      - key: PICHAT_COOKIE_SECURE
+        value: "1"
+      - key: PICHAT_INTERNET_MODE
+        value: "1"
+      - key: PICHAT_TRUST_PROXY
+        value: "1"
+      - key: PICHAT_SETUP_MODE
+        value: "1"
+      - key: PICHAT_REGISTRATION_MODE
+        value: approval
+
+databases:
+  - name: pichat-db-eu
+    plan: free
+    region: frankfurt
+    databaseName: pichat
+    user: pichat

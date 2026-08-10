@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#07101f">
+  <title>PiBrawl Arena · PiChat</title>
+  <link rel="stylesheet" href="/css/pibrawl.css?v=3600">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="back" href="/">← PiChat</a>
+      <div class="brand"><img src="/assets/brand/pichat-app-icon.svg" alt=""><div><b>PiBrawl Arena</b><small>Open Arena · 3.6</small></div></div>
+      <div class="match-stats"><span id="score-pill">⭐ 0</span><span id="fps-pill">60 FPS</span></div>
+    </header>
+
+    <main>
+      <section id="picker" class="picker">
+        <div class="hero-copy"><span class="eyebrow">PICHAT OPEN GAME</span><h1>Choisis ton combattant</h1><p>Le roster se construit automatiquement depuis le dossier <code>personnages/</code>. Aucun framework, aucun asset Brawl Stars.</p></div>
+        <div id="fighter-list" class="fighter-list"><div class="loading">Chargement des combattants…</div></div>
+        <div class="picker-actions"><button id="play" disabled>⚡ Jouer</button><button id="how">? Commandes</button></div>
+        <details class="opensource"><summary>🧩 Ajouter mon propre perso</summary><p>Duplique <code>personnages/_template</code>, renomme le dossier, modifie <code>fighter.py</code> et remplace <code>head.png</code>. Au prochain déploiement, il apparaît ici automatiquement.</p></details>
+      </section>
+
+      <section id="arena-wrap" class="arena-wrap" hidden>
+        <canvas id="arena" width="1280" height="720"></canvas>
+        <div class="hud">
+          <div class="hud-left"><div id="hp"><i></i><span>HP</span></div><div id="ammo" class="ammo"></div></div>
+          <div class="hud-center"><b id="timer">01:30</b><small>Premier à 5 éliminations</small></div>
+          <div class="hud-right"><div id="super-meter"><i></i><span>SUPER</span></div></div>
+        </div>
+        <div id="mobile-left" class="touch-zone"><div class="stick"><i></i></div></div>
+        <button id="mobile-fire" class="mobile-fire">💥</button>
+        <button id="mobile-super" class="mobile-super">⚡</button>
+        <button id="leave" class="leave">×</button>
+        <div id="result" class="result" hidden></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="help"><button class="close-help">×</button><h2>Commandes</h2><p><b>Mac / Windows :</b> ZQSD, WASD ou flèches pour bouger. Souris pour viser, clic gauche pour tirer, espace pour le Super.</p><p><b>Téléphone :</b> joystick gauche pour bouger, 💥 tire automatiquement vers l’ennemi le plus proche, ⚡ lance le Super.</p><p>PiChat possède une attaque en éventail à courte portée et un Super plus large avec recul.</p></dialog>
+  <script src="/js/pibrawl.js?v=3600"></script>
+</body>
+</html>

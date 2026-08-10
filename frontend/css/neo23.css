@@ -1,0 +1,21 @@
+:root{--neo-bg:#080b14;--neo-panel:rgba(20,24,36,.82);--neo-panel-strong:#151a28;--neo-border:rgba(255,255,255,.085);--neo-shadow:0 20px 70px rgba(0,0,0,.28);--neo-glow:0 0 0 1px rgba(124,92,255,.08),0 18px 50px rgba(60,70,180,.12)}
+html{background:var(--neo-bg)}
+body{background:radial-gradient(circle at 12% 0%,rgba(88,101,242,.18),transparent 32rem),radial-gradient(circle at 88% 8%,rgba(55,181,255,.13),transparent 28rem),linear-gradient(180deg,#0a0d17,#080a11 65%,#070910);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 72%)}
+.panel,.stat-card,.discord-modal,.studio-card,.arcade-dashboard-card,.profile-modal-card,.cloud-choice,.admin-studio-review{border-color:var(--neo-border)!important;box-shadow:var(--neo-glow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.panel,.stat-card{background:var(--neo-panel)!important}
+.admin-sidebar,.channel-panel,.member-panel,.server-rail{background:linear-gradient(180deg,rgba(17,21,32,.96),rgba(11,14,23,.97))!important;border-color:var(--neo-border)!important}
+.topbar,.channel-header,.server-header,.member-header{background:rgba(13,17,27,.78)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-color:var(--neo-border)!important}
+.brand-mark,.chat-logo{background:linear-gradient(145deg,#7c5cff,#37b5ff)!important;box-shadow:0 10px 30px rgba(88,101,242,.36),inset 0 1px 0 rgba(255,255,255,.25)}
+button,.mini,.primary-action,.ghost-button,.nav-item,.nav-link,.channel-button,.header-action,.dock-action,.server-icon{transition:transform .16s ease,box-shadow .18s ease,background-color .18s ease,border-color .18s ease,opacity .18s ease}
+button:not(:disabled):hover,.mini:hover,.nav-item:hover,.nav-link:hover,.channel-button:hover,.header-action:hover,.dock-action:hover{transform:translateY(-1px)}
+button:not(:disabled):active{transform:translateY(0) scale(.98)}
+.primary-action,.send-button,.studio-primary{background:linear-gradient(135deg,#6d5dfc,#458df7)!important;box-shadow:0 10px 26px rgba(88,101,242,.26)}
+input,textarea,select{background:rgba(8,11,18,.78)!important;border-color:rgba(255,255,255,.1)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+input:focus,textarea:focus,select:focus{border-color:rgba(124,92,255,.75)!important;box-shadow:0 0 0 3px rgba(124,92,255,.13)!important;outline:none}
+.message-row,.discord-message{border-radius:14px}.message-row:hover,.discord-message:hover{background:rgba(255,255,255,.032)!important}
+.discord-composer{background:rgba(20,25,37,.88)!important;border:1px solid rgba(255,255,255,.08)!important;box-shadow:0 16px 45px rgba(0,0,0,.22);backdrop-filter:blur(16px)}
+.mobile-bottom-nav{background:rgba(12,15,24,.88)!important;backdrop-filter:blur(20px);border-top:1px solid var(--neo-border)!important}
+.toast{backdrop-filter:blur(16px);box-shadow:var(--neo-shadow)}
+@media(max-width:760px){body::before{background-size:28px 28px}.panel,.discord-modal{border-radius:18px!important}.admin-main{padding-bottom:max(18px,env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation-duration:.001ms!important;animation-iteration-count:1!important}}

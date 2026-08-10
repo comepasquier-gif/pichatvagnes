@@ -56,6 +56,7 @@ from routes.launch31 import router as launch31_router
 from routes.railway import router as railway_router
 from routes.setup import router as setup_router
 from routes.files import router as files_router
+from routes.pibrawl import router as pibrawl_router
 
 # Création de l'application FastAPI.
 # Les infos "title"/"version" apparaissent notamment dans la documentation
@@ -157,6 +158,7 @@ app.include_router(launch31_router)
 app.include_router(railway_router)
 app.include_router(setup_router)
 app.include_router(files_router)
+app.include_router(pibrawl_router)
 
 # ---------------------------------------------------------------------------
 # Service des fichiers statiques du frontend (CSS, JS, images...)
@@ -228,6 +230,11 @@ def serve_login_page():
 def serve_register_page():
     """Sert la page d'inscription (frontend/register.html)."""
     return FileResponse(FRONTEND_DIR / "register.html")
+
+
+@app.get("/pibrawl", include_in_schema=False)
+def serve_pibrawl_page():
+    return FileResponse(FRONTEND_DIR / "pibrawl.html")
 
 
 @app.get("/admin")

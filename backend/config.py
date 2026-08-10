@@ -16,7 +16,7 @@ import os
 # Informations générales de l'application
 # ---------------------------------------------------------------------------
 APP_NAME = "PiChat"
-APP_VERSION = "3.5.0"  # Version incrémentée à chaque milestone majeur
+APP_VERSION = "3.6.0"  # Version incrémentée à chaque milestone majeur
 
 # ---------------------------------------------------------------------------
 # Réseau

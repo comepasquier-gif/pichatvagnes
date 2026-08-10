@@ -1,0 +1,16 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PiChat 3.6 OPEN ARENA</title>
+<style>body{margin:0;background:#06101d;color:#edf7ff;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:900px;margin:auto;padding:32px 18px 80px}h1{font-size:clamp(36px,8vw,68px);line-height:1;margin:.3em 0}h2{margin-top:34px;color:#6ee6ff}.card{background:#0c1b2b;border:1px solid #26485f;border-radius:20px;padding:20px;margin:14px 0}code,pre{background:#020812;border:1px solid #25465d;border-radius:10px}code{padding:2px 6px}pre{padding:14px;overflow:auto}.ok{color:#65ef9b}.warn{color:#ffd166}li{margin:8px 0}</style></head><body><main>
+<p>🐱 PICHAT</p><h1>PiChat 3.6<br>OPEN ARENA</h1>
+<div class="card"><b class="ok">Nouveau :</b> PiBrawl Arena, personnages open-source et Blueprint Render Europe.</div>
+<h2>Tester PiBrawl</h2><p>Connecte-toi puis clique sur <b>🐱 PiBrawl Arena</b> dans Outils, ou ouvre <code>/pibrawl</code>.</p>
+<p>Mac/Windows : ZQSD/WASD/flèches + souris + clic. Espace = Super. Téléphone : joystick + boutons tir/Super.</p>
+<h2>Ajouter un personnage</h2><p>Copie <code>personnages/_template/</code>, renomme le dossier, modifie <code>fighter.py</code> et remplace <code>head.png</code>.</p>
+<pre>personnages/mon_perso/
+├── fighter.py
+└── head.png</pre>
+<div class="card"><b>Sécurité :</b> fighter.py n'est jamais importé ni exécuté. PiChat analyse l'AST et n'accepte que <code>FIGHTER = {...}</code>.</div>
+<h2>Premier perso : PiChat</h2><p>3 munitions, attaque de 5 éclats cyan en éventail et Super plus large avec recul. Aucun asset Brawl Stars n'est inclus.</p>
+<h2>Passer à Frankfurt</h2><ol><li>Garde Oregon actif.</li><li>Push la 3.6 sur GitHub.</li><li>Render → New → Blueprint.</li><li>Choisis le dépôt.</li><li>Blueprint Path : <code>render-europe.yaml</code>.</li><li>Deploy.</li></ol>
+<p>Le Blueprint crée le Web Service et PostgreSQL en région Frankfurt.</p>
+<p class="warn">Avant de supprimer Oregon : Admin → Sauvegardes, puis valide la restauration côté Europe.</p>
+</main></body></html>

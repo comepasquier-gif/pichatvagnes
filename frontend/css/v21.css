@@ -1,0 +1,196 @@
+/* PiChat 2.1 — modules DM, recherche, PiTutor+ et PiRPG */
+:root {
+  --v21-panel: #25272b;
+  --v21-panel: color-mix(in srgb, var(--panel, #2b2d31) 92%, #000 8%);
+  --v21-panel-2: #303238;
+  --v21-panel-2: color-mix(in srgb, var(--panel, #2b2d31) 78%, #fff 4%);
+  --v21-border: rgba(255,255,255,.09);
+  --v21-text: var(--text, #f2f3f5);
+  --v21-muted: var(--muted, #b5bac1);
+  --v21-brand: var(--primary, #5865f2);
+  --v21-good: #23a559;
+  --v21-warn: #f0b232;
+  --v21-bad: #da373c;
+}
+
+/* Messages avancés */
+.reply-composer-bar {
+  display:flex; align-items:center; gap:10px; padding:9px 12px;
+  margin:0 12px 6px; border-left:3px solid var(--v21-brand);
+  background:rgba(88,101,242,.12); border-radius:8px; color:var(--v21-text);
+}
+.reply-composer-bar > div { min-width:0; flex:1; }
+.reply-composer-bar strong,.reply-composer-bar small { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.reply-composer-bar small { color:var(--v21-muted); }
+.reply-composer-bar button { border:0; background:transparent; color:var(--v21-muted); font-size:20px; cursor:pointer; }
+.message-reply-preview,.dm-message-reply {
+  color:var(--v21-muted); font-size:.82rem; border-left:2px solid rgba(255,255,255,.18);
+  padding-left:8px; margin:0 0 5px; max-width:680px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.message-edited { color:var(--v21-muted); font-size:.72rem; margin-left:5px; }
+.message-pin-badge { color:var(--v21-warn); margin-left:6px; font-size:.78rem; }
+.message-focus { animation:v21-focus 1.8s ease; }
+@keyframes v21-focus { 0%,100%{background:transparent} 25%,70%{background:rgba(88,101,242,.2)} }
+
+/* Modales communes */
+.ultra-wide-modal { width:min(1180px,96vw); max-height:min(860px,94dvh); }
+.modal.open { display:flex !important; }
+.v21-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.v21-empty { display:grid; place-items:center; align-content:center; min-height:240px; text-align:center; color:var(--v21-muted); padding:30px; }
+.v21-empty span { font-size:46px; }
+.v21-empty strong { color:var(--v21-text); font-size:1.15rem; margin-top:8px; }
+.v21-section-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.v21-section-title h3 { margin:0; }
+
+/* Messages privés */
+.dm-modal-card { overflow:hidden; padding:0 !important; }
+.dm-layout { display:grid; grid-template-columns:310px minmax(0,1fr); height:min(760px,88dvh); min-height:520px; background:var(--v21-panel); }
+.dm-sidebar { min-width:0; display:flex; flex-direction:column; background:rgba(0,0,0,.18); border-right:1px solid var(--v21-border); }
+.dm-sidebar-head { padding:16px; border-bottom:1px solid var(--v21-border); }
+.dm-sidebar-head h2 { margin:0 0 10px; }
+.dm-sidebar input { width:100%; border:0; border-radius:7px; padding:10px 11px; color:var(--v21-text); background:rgba(0,0,0,.28); }
+.dm-conversations,.dm-user-list { overflow:auto; padding:8px; }
+.dm-conversations { flex:1; }
+.dm-user-list { max-height:215px; border-top:1px solid var(--v21-border); }
+.dm-user-list::before { content:'Membres disponibles'; display:block; padding:8px 9px; color:var(--v21-muted); font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+.dm-conversation,.dm-user-choice { width:100%; display:grid; grid-template-columns:42px minmax(0,1fr) auto; align-items:center; gap:10px; border:0; background:transparent; color:var(--v21-text); border-radius:8px; padding:8px; text-align:left; cursor:pointer; }
+.dm-conversation:hover,.dm-user-choice:hover,.dm-conversation.active { background:rgba(255,255,255,.08); }
+.dm-conversation span:nth-child(2),.dm-user-choice span:nth-child(2){min-width:0}
+.dm-conversation strong,.dm-conversation small,.dm-user-choice strong,.dm-user-choice small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dm-conversation small,.dm-user-choice small { color:var(--v21-muted); font-size:.77rem; }
+.dm-conversation > b { background:var(--v21-bad); color:#fff; border-radius:999px; min-width:20px; padding:2px 6px; text-align:center; font-size:.72rem; }
+.dm-chat { min-width:0; display:flex; flex-direction:column; position:relative; }
+.dm-active-head { height:64px; padding:10px 16px; display:flex; align-items:center; gap:11px; border-bottom:1px solid var(--v21-border); box-shadow:0 1px 0 rgba(0,0,0,.2); }
+.dm-active-head > div:nth-child(2) { min-width:0; flex:1; }
+.dm-active-head strong,.dm-active-head small { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.dm-active-head small { color:var(--v21-muted); }
+.dm-message-list { flex:1; overflow:auto; overscroll-behavior:contain; padding:18px 20px; display:flex; flex-direction:column; gap:9px; scroll-behavior:smooth; }
+.dm-message { position:relative; display:flex; flex-direction:column; max-width:min(76%,680px); }
+.dm-message.mine { align-self:flex-end; align-items:flex-end; }
+.dm-message.theirs { align-self:flex-start; }
+.dm-bubble { white-space:pre-wrap; word-break:break-word; padding:9px 12px; border-radius:15px 15px 15px 4px; background:rgba(255,255,255,.09); color:var(--v21-text); }
+.dm-message.mine .dm-bubble { background:var(--v21-brand); border-radius:15px 15px 4px 15px; color:white; }
+.dm-message > small { color:var(--v21-muted); font-size:.68rem; margin:3px 4px 0; }
+.dm-actions { opacity:0; display:flex; gap:4px; position:absolute; top:-18px; right:0; background:var(--v21-panel-2); border:1px solid var(--v21-border); border-radius:7px; padding:2px; transition:.15s; }
+.dm-message.theirs .dm-actions { left:0; right:auto; }
+.dm-message:hover .dm-actions,.dm-message:focus-within .dm-actions { opacity:1; }
+.dm-actions button { border:0; background:transparent; color:var(--v21-muted); cursor:pointer; border-radius:5px; padding:4px 7px; }
+.dm-actions button:hover { color:var(--v21-text); background:rgba(255,255,255,.08); }
+.dm-composer { padding:0 16px 16px; }
+.dm-composer form { display:flex; gap:8px; padding:8px; background:rgba(0,0,0,.22); border-radius:10px; }
+.dm-composer textarea { flex:1; resize:none; min-height:42px; max-height:150px; border:0; outline:0; color:var(--v21-text); background:transparent; font:inherit; padding:8px; }
+.dm-composer button { align-self:flex-end; border:0; border-radius:8px; padding:10px 14px; background:var(--v21-brand); color:#fff; cursor:pointer; }
+.dm-reply-bar { display:flex; align-items:center; gap:9px; padding:8px 12px; background:rgba(88,101,242,.12); border-radius:8px 8px 0 0; }
+.dm-reply-bar > div { min-width:0; flex:1; }
+.dm-reply-bar strong,.dm-reply-bar small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* Recherche et épingles */
+.search-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(160px,260px) auto; gap:9px; padding:0 0 14px; }
+.search-form input { min-width:0; border:1px solid var(--v21-border); background:rgba(0,0,0,.24); color:var(--v21-text); border-radius:8px; padding:11px; }
+.search-form button,.search-result-card button { border:0; border-radius:8px; padding:9px 12px; background:var(--v21-brand); color:white; cursor:pointer; }
+.search-results { display:flex; flex-direction:column; gap:9px; max-height:60dvh; overflow:auto; }
+.search-result-card { border:1px solid var(--v21-border); background:rgba(255,255,255,.035); border-radius:10px; padding:12px; }
+.search-result-card > div:first-child { display:flex; justify-content:space-between; gap:12px; }
+.search-result-card small { color:var(--v21-muted); }
+.search-result-card p { white-space:pre-wrap; word-break:break-word; }
+.search-result-card > div:last-child { display:flex; justify-content:flex-end; }
+
+/* PiTutor+ */
+.tutor-plus-modal { width:min(1160px,96vw); }
+.tutor-plus-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr); gap:16px; max-height:78dvh; overflow:hidden; }
+.tutor-main-column,.tutor-side-column { min-width:0; overflow:auto; }
+.tutor-main-column { padding-right:4px; }
+.tutor-side-column { border-left:1px solid var(--v21-border); padding-left:16px; }
+.tutor-mode-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.tutor-answer { white-space:pre-wrap; line-height:1.62; padding:15px; background:rgba(0,0,0,.18); border:1px solid var(--v21-border); border-radius:10px; }
+.tutor-dashboard { border:1px solid var(--v21-border); background:rgba(255,255,255,.035); border-radius:10px; padding:12px; margin-bottom:14px; }
+.tutor-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+.tutor-metrics span { display:flex; flex-direction:column; padding:9px; background:rgba(0,0,0,.18); border-radius:8px; color:var(--v21-muted); }
+.tutor-metrics b { color:var(--v21-text); font-size:1.2rem; }
+.tutor-study-sets,.tutor-history { display:flex; flex-direction:column; gap:7px; }
+.tutor-study-sets article,.tutor-history article { cursor:pointer; padding:10px; border-radius:8px; background:rgba(255,255,255,.045); border:1px solid transparent; }
+.tutor-study-sets article:hover,.tutor-history article:hover { border-color:rgba(88,101,242,.5); }
+.tutor-study-sets article { display:flex; justify-content:space-between; gap:8px; }
+.tutor-study-sets strong,.tutor-study-sets small,.tutor-history strong,.tutor-history small { display:block; }
+.tutor-study-sets small,.tutor-history small { color:var(--v21-muted); }
+.tutor-history p { margin:5px 0; color:var(--v21-muted); }
+
+/* PiRPG */
+.rpg-modal-card { width:min(1160px,96vw); max-height:92dvh; overflow:hidden; }
+.rpg-tabs { display:flex; gap:6px; overflow:auto; padding-bottom:10px; border-bottom:1px solid var(--v21-border); }
+.rpg-tabs button { border:0; white-space:nowrap; color:var(--v21-muted); background:transparent; border-radius:8px; padding:9px 12px; cursor:pointer; }
+.rpg-tabs button.active,.rpg-tabs button:hover { color:white; background:var(--v21-brand); }
+.rpg-content { max-height:70dvh; overflow:auto; padding:15px 2px 4px; }
+.rpg-hero { display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:14px; align-items:center; padding:16px; border-radius:14px; background:linear-gradient(135deg,rgba(88,101,242,.23),rgba(35,165,89,.09)); border:1px solid var(--v21-border); }
+.rpg-avatar { width:72px; height:72px; display:grid; place-items:center; font-size:38px; border-radius:20px; background:rgba(0,0,0,.25); }
+.rpg-hero h3,.rpg-hero p { margin:2px 0; }
+.rpg-hero p { color:var(--v21-muted); }
+.rpg-hero button,.rpg-card button,.boss-actions button { border:0; border-radius:8px; padding:9px 12px; background:var(--v21-brand); color:#fff; cursor:pointer; }
+.rpg-stat-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; margin:12px 0; }
+.rpg-stat-grid div { text-align:center; border-radius:10px; padding:11px 6px; background:rgba(255,255,255,.045); border:1px solid var(--v21-border); }
+.rpg-stat-grid b,.rpg-stat-grid small { display:block; }
+.rpg-stat-grid b { font-size:1.25rem; }
+.rpg-stat-grid small { color:var(--v21-muted); font-size:.66rem; letter-spacing:.08em; }
+.rpg-class-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.rpg-class-grid button { border:1px solid var(--v21-border); color:var(--v21-text); background:rgba(255,255,255,.035); border-radius:10px; padding:11px; text-transform:capitalize; cursor:pointer; }
+.rpg-class-grid button.active { border-color:var(--v21-brand); background:rgba(88,101,242,.2); }
+.rpg-card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+.rpg-card { display:grid; grid-template-columns:42px minmax(0,1fr) auto; align-items:center; gap:10px; padding:12px; border:1px solid var(--v21-border); background:rgba(255,255,255,.035); border-radius:12px; }
+.rpg-card > span { font-size:30px; }
+.rpg-card strong,.rpg-card small { display:block; }
+.rpg-card p { margin:4px 0; color:var(--v21-muted); font-size:.84rem; }
+.rpg-card progress { width:100%; accent-color:var(--v21-brand); }
+.rpg-card.rarity-rare { border-color:#3ba7ff66; }
+.rpg-card.rarity-epic { border-color:#b06cff77; }
+.rpg-card.rarity-legendary { border-color:#f0b23288; box-shadow:0 0 18px #f0b23218 inset; }
+.boss-card { max-width:720px; margin:auto; text-align:center; padding:20px; border-radius:16px; background:radial-gradient(circle at 50% 0,rgba(218,55,60,.2),transparent 55%),rgba(255,255,255,.035); border:1px solid var(--v21-border); }
+.boss-icon { font-size:76px; }
+.boss-hp { height:16px; background:rgba(0,0,0,.3); border-radius:999px; overflow:hidden; margin:12px 0 6px; }
+.boss-hp span { display:block; height:100%; background:linear-gradient(90deg,#da373c,#f0b232); }
+.boss-actions { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:16px 0; }
+.rpg-ranking { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px; }
+.rpg-ranking li { display:grid; grid-template-columns:28px 42px minmax(0,1fr) auto; gap:9px; align-items:center; padding:9px 11px; border-radius:9px; background:rgba(255,255,255,.035); }
+.rpg-ranking small { color:var(--v21-muted); }
+
+/* Admin 2.1 / Déploiement */
+.deployment-grid { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:16px; }
+.deployment-readiness { display:grid; gap:8px; }
+.deployment-check { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; border-radius:9px; background:rgba(255,255,255,.04); }
+.deployment-check.good b { color:var(--v21-good); }
+.deployment-check.warn b { color:var(--v21-warn); }
+.deployment-code { min-height:180px; white-space:pre-wrap; background:#111318; color:#d7dae0; border-radius:10px; padding:13px; overflow:auto; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8rem; }
+
+@media (max-width: 900px) {
+  .tutor-plus-layout,.deployment-grid { grid-template-columns:1fr; max-height:none; }
+  .tutor-side-column { border-left:0; border-top:1px solid var(--v21-border); padding:15px 0 0; }
+  .rpg-stat-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
+@media (max-width: 760px) {
+  .ultra-wide-modal,.tutor-plus-modal,.rpg-modal-card,.dm-modal-card { width:100vw !important; height:100dvh; max-height:100dvh !important; border-radius:0 !important; }
+  .dm-layout { grid-template-columns:1fr; height:100dvh; min-height:0; }
+  .dm-sidebar { position:absolute; z-index:3; inset:0 auto 0 0; width:min(88vw,340px); transform:translateX(-105%); transition:transform .2s; box-shadow:20px 0 50px #0008; }
+  .dm-modal-card:not(.dm-chat-selected) .dm-sidebar,.dm-sidebar.mobile-open { transform:translateX(0); }
+  .dm-chat { height:100dvh; }
+  .dm-active-head { padding-top:max(10px,env(safe-area-inset-top)); height:auto; min-height:62px; }
+  .dm-message-list { padding:14px 10px; -webkit-overflow-scrolling:touch; touch-action:pan-y; }
+  .dm-message { max-width:88%; }
+  .dm-actions { opacity:1; position:static; margin-top:3px; background:transparent; border:0; }
+  .dm-composer { padding:0 8px max(8px,env(safe-area-inset-bottom)); }
+  .search-form { grid-template-columns:1fr; }
+  .tutor-mode-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .rpg-content { max-height:calc(100dvh - 112px); -webkit-overflow-scrolling:touch; }
+  .rpg-hero { grid-template-columns:58px minmax(0,1fr); }
+  .rpg-avatar { width:58px; height:58px; font-size:30px; }
+  .rpg-hero > button { grid-column:1/-1; }
+  .rpg-stat-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .rpg-class-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .rpg-card-grid { grid-template-columns:1fr; }
+  .rpg-card { grid-template-columns:38px minmax(0,1fr); }
+  .rpg-card button,.rpg-card > b { grid-column:1/-1; }
+  .rpg-ranking li { grid-template-columns:24px 38px minmax(0,1fr); }
+  .rpg-ranking li small { grid-column:3; }
+}
+
+/* PiChat 2.1.5 — état fiable du bouton d'envoi */
+.composer-send-status{font-weight:700}.composer-send-status[data-state="error"]{color:#ed4245}.composer-send-status[data-state="connecting"]{color:#f0b232}.composer-send-status[data-state="connected"]{color:#57f287}.send-button[data-state="connecting"]{opacity:.78;animation:pichatSendPulse 1.2s infinite}.send-button[data-state="error"]{outline:2px solid rgba(237,66,69,.45)}@keyframes pichatSendPulse{50%{transform:scale(.92)}}

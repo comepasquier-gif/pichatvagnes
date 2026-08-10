@@ -24,3 +24,11 @@
 
 ## Déploiement
 - Dockerfile Render conserve `PYTHONPATH=/app:/app/backend` afin que `migrations` soit importable.
+
+## 3.6.0 — OPEN ARENA
+- Ajout de PiBrawl Arena, mini arena-shooter original en Canvas, clavier/souris + tactile.
+- PiChat est le premier combattant, avec attaque courte portée en éventail et Super à recul.
+- Système de personnages auto-découvert dans `personnages/`.
+- `fighter.py` déclaratif et analysé par AST : aucun Python arbitraire exécuté sur le serveur.
+- Ajout de `render-europe.yaml` : Web Service + PostgreSQL à Frankfurt pour réduire le ping en France.
+- Nouvelle route `/pibrawl` et API `/api/pibrawl/roster`.
