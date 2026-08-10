@@ -1,4 +1,4 @@
-const VERSION='pichat-v3-3600';
+const VERSION='pichat-v3-3620';
 const SHELL_CACHE=`${VERSION}-shell`;
 const RUNTIME_CACHE=`${VERSION}-runtime`;
 // 3.5 PERFORMANCE : shell volontairement petit. Les gros modules sont mis en
@@ -6,11 +6,10 @@ const RUNTIME_CACHE=`${VERSION}-runtime`;
 const CORE_SHELL=[
   '/offline.html','/manifest.webmanifest',
   '/css/brand35.css?v=3500','/css/pwa.css?v=3500','/css/chat35.bundle.css?v=3600','/css/admin35.bundle.css?v=3500',
-  '/js/brand35.js?v=3500','/js/performance35.js?v=3500','/js/pwa.js?v=3500','/js/chat35.bundle.js?v=3600','/js/admin35.bundle.js?v=3500',
-  '/assets/icons/pichat-192.png','/assets/icons/pichat-512.png','/assets/brand/pichat-mascot.svg?v=3500'
-];
+  '/js/brand35.js?v=3500','/js/performance35.js?v=3500','/js/pwa.js?v=3500','/js/chat35.bundle.js?v=3600','/js/admin35.bundle.js?v=3620',
+  '/assets/icons/pichat-192.png','/assets/icons/pichat-512.png','/assets/brand/pichat-mascot.svg?v=3500','/css/fix362.css?v=3620','/js/fix362.js?v=3620'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(SHELL_CACHE).then(c=>c.addAll(CORE_SHELL)).catch(()=>null));self.skipWaiting()});
-self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>![SHELL_CACHE,RUNTIME_CACHE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();const list=await self.clients.matchAll({type:'window',includeUncontrolled:true});list.forEach(c=>c.postMessage({type:'PICHAT_UPDATED',version:'3.6.0'}))})())});
+self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>![SHELL_CACHE,RUNTIME_CACHE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();const list=await self.clients.matchAll({type:'window',includeUncontrolled:true});list.forEach(c=>c.postMessage({type:'PICHAT_UPDATED',version:'3.6.2'}))})())});
 async function networkFirst(req,fallback){try{const fresh=await fetch(req,{cache:'no-store'});if(fresh.ok){const c=await caches.open(RUNTIME_CACHE);c.put(req,fresh.clone())}return fresh}catch(_){return(await caches.match(req))||(fallback?await caches.match(fallback):Response.error())}}
 async function cacheFirstVersioned(req){const cached=await caches.match(req);if(cached)return cached;try{const fresh=await fetch(req);if(fresh.ok){const c=await caches.open(RUNTIME_CACHE);await c.put(req,fresh.clone())}return fresh}catch(_){return Response.error()}}
 async function staleWhileRevalidate(req){const cached=await caches.match(req);const refresh=fetch(req).then(async fresh=>{if(fresh.ok){const c=await caches.open(RUNTIME_CACHE);await c.put(req,fresh.clone())}return fresh}).catch(()=>null);return cached||await refresh||Response.error()}

@@ -54,7 +54,7 @@ def _local_answer(query,sender,room_id):
 
 def _openai_sync(query,sender,room_id,settings):
     key=_env_key()
-    if not key: raise AIError("Aucune clé OpenAI configurée. Lance CONFIGURER_IA.bat.")
+    if not key: raise AIError("Aucune clé OpenAI active. Va dans Admin → Intégrations → Ajouter une API.")
     history=get_room_history(room_id,limit=10)
     context='\n'.join([f"{m['username']}: {m['content']}" for m in history[-8:] if not m.get('is_bot')])
     instructions=(settings['instructions']+"\nContexte PiChat: l'utilisateur est "+sender['username']+", classe "+str(sender.get('class_code') or '-')+". Ne prétends pas avoir des permissions d'administration. Réponds dans le salon, sans Markdown excessif.")

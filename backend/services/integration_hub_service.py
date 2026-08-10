@@ -147,27 +147,68 @@ def _get_private_integration(integration_id: int):
         return c.execute("SELECT * FROM api_integrations WHERE id=?", (integration_id,)).fetchone()
 
 
-def _test_openai_key(key: str) -> tuple[bool, str, int]:
+def _openai_error_message(error: HTTPError) -> str:
+    detail = ""
+    code = ""
+    try:
+        payload = json.loads(error.read().decode("utf-8"))
+        info = payload.get("error") or {}
+        detail = str(info.get("message") or "")
+        code = str(info.get("code") or info.get("type") or "").lower()
+    except Exception:
+        pass
+    low = (detail + " " + code).lower()
+    if "insufficient_quota" in low or "quota" in low or "billing" in low:
+        return "Clé reconnue, mais le compte API n'a pas de crédit/facturation disponible. ChatGPT et l'API OpenAI ont une facturation séparée."
+    if "invalid_api_key" in low or error.code == 401:
+        return "Clé API refusée. Crée une nouvelle clé sur OpenAI Platform et recolle-la dans PiChat."
+    if "model" in low and ("not found" in low or "does not exist" in low or "access" in low):
+        return "La clé fonctionne, mais ce modèle n'est pas disponible pour ce projet API. Essaie gpt-5.6-luna, gpt-5.6-terra ou gpt-5.6."
+    if error.code == 429:
+        return "OpenAI limite temporairement les requêtes ou le budget API est atteint."
+    if error.code == 403:
+        return "La clé existe mais n'a pas l'autorisation d'utiliser ce modèle ou l'endpoint Responses."
+    return detail[:320] or "OpenAI a refusé la requête (HTTP %s)." % error.code
+
+
+def _extract_response_text(payload: Dict[str, Any]) -> str:
+    texts = []
+    for item in payload.get("output", []) if isinstance(payload, dict) else []:
+        if not isinstance(item, dict) or item.get("type") != "message":
+            continue
+        for part in item.get("content", []) or []:
+            if isinstance(part, dict) and part.get("type") == "output_text" and part.get("text"):
+                texts.append(str(part["text"]))
+    return "\n".join(texts).strip()
+
+
+def _test_openai_key(key: str, model: str) -> tuple[bool, str, int]:
+    """Fait un vrai appel Responses : teste clé + modèle + droits + facturation."""
+    payload = {
+        "model": _normalise_model(model),
+        "input": "Réponds uniquement par OK.",
+        "max_output_tokens": 16,
+    }
     req = urlrequest.Request(
-        OPENAI_API_BASE + "/models",
-        headers={"Authorization": "Bearer " + key, "Accept": "application/json", "User-Agent": "PiChat/3.5"},
-        method="GET",
+        OPENAI_API_BASE + "/responses",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": "Bearer " + key,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "PiChat/3.6.2",
+        },
+        method="POST",
     )
     try:
-        with urlrequest.urlopen(req, timeout=25) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-        count = len(payload.get("data") or []) if isinstance(payload, dict) else 0
-        return True, "Connexion réussie.", count
+        with urlrequest.urlopen(req, timeout=30) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        text = _extract_response_text(data)
+        return True, "API opérationnelle avec %s%s" % (payload["model"], " · réponse OK" if text else ""), 1
     except HTTPError as error:
-        detail = ""
-        try:
-            detail = str(json.loads(error.read().decode("utf-8")).get("error", {}).get("message") or "")
-        except Exception:
-            pass
-        return False, detail[:300] or "Clé refusée (HTTP %s)." % error.code, 0
+        return False, _openai_error_message(error), 0
     except (URLError, TimeoutError):
-        return False, "Impossible de joindre le fournisseur.", 0
-
+        return False, "Impossible de joindre OpenAI depuis le serveur Render.", 0
 
 def test_integration(integration_id: int) -> Dict[str, Any]:
     row = _get_private_integration(integration_id)
@@ -178,7 +219,7 @@ def test_integration(integration_id: int) -> Dict[str, Any]:
         raise IntegrationHubError("La clé API ne peut pas être déchiffrée. Vérifie PICHAT_SECRET_KEY.")
     provider = str(row["provider"]).lower()
     if provider == "openai":
-        ok, message, count = _test_openai_key(key)
+        ok, message, count = _test_openai_key(key, str(row["model"] or DEFAULT_MODEL))
     else:
         # Generic providers can be stored/disabled safely. Network tests are explicit per provider.
         raise IntegrationHubError("Le test automatique est actuellement disponible pour OpenAI.")
@@ -189,6 +230,12 @@ def test_integration(integration_id: int) -> Dict[str, Any]:
         )
     if not ok:
         raise IntegrationHubError(message)
+    # "API facile" : un test réussi rend réellement l'API utilisable par PiAI et PiGame Studio.
+    if provider == "openai":
+        selected_model = _normalise_model(str(row["model"] or DEFAULT_MODEL))
+        with get_db_cursor() as c:
+            c.execute("UPDATE ai_settings SET enabled=1,provider='openai',model=?,updated_at=datetime('now') WHERE id=1", (selected_model,))
+            c.execute("UPDATE game_studio_settings SET direct_api_enabled=1,updated_at=datetime('now') WHERE id=1")
     result = update_integration(integration_id)
     result["models_visible"] = count
     result["message"] = message
@@ -276,7 +323,7 @@ def test_openai_connection() -> Dict[str, Any]:
         key = os.getenv("OPENAI_API_KEY", "").strip()
         if not key:
             raise IntegrationHubError("Aucune clé API OpenAI n’est configurée.")
-        ok, message, count = _test_openai_key(key)
+        ok, message, count = _test_openai_key(key, get_openai_model())
         if not ok:
             raise IntegrationHubError(message)
         out = public_status(); out["message"] = message; out["models_visible"] = count; return out

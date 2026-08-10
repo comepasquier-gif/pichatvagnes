@@ -29,6 +29,7 @@
 
 
 <link rel="stylesheet" href="/css/chat35.bundle.css?v=3510">
+<link rel="stylesheet" href="/css/fix362.css?v=3620">
 </head>
 <body class="discord-body">
 <div id="pwa-offline-banner" class="pwa-offline-banner">📡 Hors connexion — reconnexion en cours</div>
@@ -122,7 +123,7 @@
         <button type="button" class="composer-plus" id="composer-plus" title="Commandes">＋</button>
         <button type="button" id="file-button" class="composer-icon" title="Envoyer un fichier">📎</button>
         <input id="file-input" type="file" hidden accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.md,.csv,.docx,.xlsx,.pptx,.odt,.ods,.odp,.zip">
-        <input id="message-input" placeholder="Envoyer un message dans #général" maxlength="2000" autocomplete="off" required>
+        <textarea id="message-input" rows="1" placeholder="Envoyer un message dans #général" maxlength="2000" autocomplete="off" enterkeyhint="send" required></textarea>
         <button type="button" id="emoji-button" class="composer-icon" title="Réaction rapide">☺</button>
         <button type="submit" class="send-button" id="message-send-button" aria-label="Envoyer le message">➤</button>
       </form>
@@ -331,10 +332,10 @@
 <!-- PiChat 2.1 : messages privés -->
 <div class="modal-backdrop" id="dm-modal">
   <section class="discord-modal ultra-wide-modal dm-modal-card">
-    <header><div><span class="eyebrow">MESSAGES PRIVÉS</span><h2>Conversations</h2><p>Discute avec les membres qui partagent un espace avec toi.</p></div><button class="modal-close">×</button></header>
+    <header><div><span class="eyebrow">MESSAGES PRIVÉS</span><h2>Conversations</h2><p>Discute avec tes amis, ta classe et les membres de tes espaces ou serveurs.</p></div><button class="modal-close">×</button></header>
     <div class="dm-layout">
       <aside class="dm-sidebar"><input id="dm-user-search" placeholder="Rechercher un membre…"><div id="dm-conversations" class="dm-conversations"></div><details><summary>Nouvelle conversation</summary><div id="dm-user-list" class="dm-user-list"></div></details></aside>
-      <main class="dm-chat"><div id="dm-empty" class="dm-empty">Choisis une conversation.</div><div id="dm-active" hidden><header class="dm-active-header"><span class="avatar" id="dm-active-avatar">?</span><div><strong id="dm-active-name">—</strong><small id="dm-active-status"></small></div></header><div id="dm-message-list" class="dm-message-list"></div><div id="dm-reply-bar" class="reply-composer-bar" hidden><div><small>Répondre à</small><strong id="dm-reply-user">—</strong><span id="dm-reply-preview"></span></div><button id="dm-cancel-reply">×</button></div><form id="dm-form" class="dm-composer"><input id="dm-input" maxlength="2000" placeholder="Message privé…" required><button>➤</button></form></div></main>
+      <main class="dm-chat"><div id="dm-empty" class="dm-empty">Choisis une conversation.</div><div id="dm-active" hidden><header class="dm-active-head"><span class="avatar" id="dm-active-avatar">?</span><div><strong id="dm-active-name">—</strong><small id="dm-active-status"></small></div></header><div id="dm-message-list" class="dm-message-list"></div><div id="dm-reply-bar" class="reply-composer-bar" hidden><div><small>Répondre à</small><strong id="dm-reply-user">—</strong><span id="dm-reply-preview"></span></div><button id="dm-cancel-reply">×</button></div><form id="dm-form" class="dm-composer"><textarea id="dm-input" rows="1" maxlength="2000" placeholder="Écrire un message privé…" enterkeyhint="send" required></textarea><button type="submit" aria-label="Envoyer le message privé">➤</button></form></div></main>
     </div>
   </section>
 </div>
@@ -370,6 +371,7 @@
 
 
 <script src="/js/chat35.bundle.js?v=3510"></script>
-<script src="/js/pibrawl_link.js?v=3600"></script>
+<script src="/js/fix362.js?v=3620"></script>
+<script src="/js/pibrawl_link.js?v=3620"></script>
 </body>
 </html>

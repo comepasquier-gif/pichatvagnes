@@ -17,51 +17,92 @@ def _user_public(row):
 
 
 def users_available_for_dm(user: dict):
-    """Membres partageant au moins un espace avec l'utilisateur."""
+    """Membres joignables : amis, même classe, espace ou serveur partagé.
+
+    Cette logique garde la compatibilité avec les anciennes instances PiChat où
+    ``space_members`` peut être vide après une migration 3.x.
+    """
+    uid = int(user["id"])
+    class_code = str(user.get("class_code") or "").strip()
     with get_db_cursor() as c:
         if user.get("is_admin"):
             rows = c.execute(
                 """SELECT id,username,class_code,profile_color,status_message,is_admin,is_moderator
                    FROM users WHERE id!=? AND is_bot=0 AND is_banned=0
                    ORDER BY username COLLATE NOCASE LIMIT 500""",
-                (user["id"],),
+                (uid,),
             ).fetchall()
         else:
             rows = c.execute(
                 """SELECT DISTINCT u.id,u.username,u.class_code,u.profile_color,u.status_message,u.is_admin,u.is_moderator
-                   FROM space_members mine
-                   JOIN space_members other ON other.space_id=mine.space_id
-                   JOIN users u ON u.id=other.user_id
-                   WHERE mine.user_id=? AND u.id!=? AND u.is_bot=0 AND u.is_banned=0
+                   FROM users u
+                   WHERE u.id!=? AND u.is_bot=0 AND u.is_banned=0 AND (
+                     (? != '' AND COALESCE(u.class_code,'')=?)
+                     OR EXISTS (
+                       SELECT 1 FROM friendships f
+                       WHERE f.status='accepted'
+                         AND ((f.user_low_id=? AND f.user_high_id=u.id) OR (f.user_high_id=? AND f.user_low_id=u.id))
+                     )
+                     OR EXISTS (
+                       SELECT 1 FROM space_members mine JOIN space_members other ON other.space_id=mine.space_id
+                       WHERE mine.user_id=? AND other.user_id=u.id
+                     )
+                     OR EXISTS (
+                       SELECT 1 FROM custom_server_members mine JOIN custom_server_members other ON other.server_id=mine.server_id
+                       WHERE mine.user_id=? AND other.user_id=u.id
+                     )
+                   )
                    ORDER BY u.username COLLATE NOCASE LIMIT 500""",
-                (user["id"], user["id"]),
+                (uid, class_code, class_code, uid, uid, uid, uid),
             ).fetchall()
     return [_user_public(r) for r in rows]
 
-
 def can_dm(sender: dict, target_id: int) -> bool:
-    if int(sender["id"]) == int(target_id):
+    uid = int(sender["id"])
+    target_id = int(target_id)
+    if uid == target_id:
         return False
     with get_db_cursor() as c:
-        target = c.execute("SELECT id,is_bot,is_banned FROM users WHERE id=?", (target_id,)).fetchone()
+        target = c.execute("SELECT id,is_bot,is_banned,class_code FROM users WHERE id=?", (target_id,)).fetchone()
         if not target or target["is_bot"] or target["is_banned"]:
             return False
         blocked = c.execute(
             """SELECT 1 FROM user_blocks WHERE
                (blocker_id=? AND blocked_id=?) OR (blocker_id=? AND blocked_id=?) LIMIT 1""",
-            (sender["id"], target_id, target_id, sender["id"]),
+            (uid, target_id, target_id, uid),
         ).fetchone()
         if blocked:
             return False
         if sender.get("is_admin"):
             return True
-        shared = c.execute(
+
+        sender_class = str(sender.get("class_code") or "").strip()
+        target_class = str(target["class_code"] or "").strip()
+        if sender_class and sender_class == target_class:
+            return True
+
+        low, high = sorted((uid, target_id))
+        friend = c.execute(
+            "SELECT 1 FROM friendships WHERE user_low_id=? AND user_high_id=? AND status='accepted' LIMIT 1",
+            (low, high),
+        ).fetchone()
+        if friend:
+            return True
+
+        shared_space = c.execute(
             """SELECT 1 FROM space_members a JOIN space_members b ON b.space_id=a.space_id
                WHERE a.user_id=? AND b.user_id=? LIMIT 1""",
-            (sender["id"], target_id),
+            (uid, target_id),
         ).fetchone()
-    return shared is not None
+        if shared_space:
+            return True
 
+        shared_server = c.execute(
+            """SELECT 1 FROM custom_server_members a JOIN custom_server_members b ON b.server_id=a.server_id
+               WHERE a.user_id=? AND b.user_id=? LIMIT 1""",
+            (uid, target_id),
+        ).fetchone()
+    return shared_server is not None
 
 def _reply_preview(c, reply_to_id):
     if not reply_to_id:
