@@ -1,0 +1,16 @@
+venv
+.venv
+__pycache__
+*.pyc
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.DS_Store
+database/*.db
+database/*.sqlite*
+backups/*.zip
+runtime
+logs
+.pytest_cache

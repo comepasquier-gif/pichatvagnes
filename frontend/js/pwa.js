@@ -23,7 +23,7 @@
   async function registerSW(){
     if(!('serviceWorker' in navigator))return;
     try{
-      registration=await navigator.serviceWorker.register('/service-worker.js',{scope:'/',updateViaCache:'none'});
+      registration=await navigator.serviceWorker.register('/service-worker.js?v=3630',{scope:'/',updateViaCache:'none'});
       registration.addEventListener('updatefound',()=>{const w=registration.installing;if(!w)return;w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)$('pwa-update-banner')?.classList.add('show')})});
       let reloading=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;location.reload()});
       navigator.serviceWorker.addEventListener('message',e=>{if(e.data?.type==='PICHAT_UPDATED'){toast('PiChat mis à jour · '+(e.data.version||''));}if(e.data?.type==='pichat:notification-click'&&e.data.roomId){if(window.switchRoom)window.switchRoom(Number(e.data.roomId));else location.href=`/?room=${Number(e.data.roomId)}`}});

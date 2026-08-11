@@ -195,9 +195,16 @@ def serve_service_worker():
     )
 
 
+
+HTML_NO_CACHE_HEADERS = {
+    "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
+
 @app.get("/offline.html", include_in_schema=False)
 def serve_offline_page():
-    return FileResponse(FRONTEND_DIR / "offline.html")
+    return FileResponse(FRONTEND_DIR / "offline.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/")
@@ -217,24 +224,24 @@ def serve_home_page():
     session elle-même). Un utilisateur non connecté qui accède à "/"
     verra juste la page se rediriger vers /login une fois le JS exécuté.
     """
-    return FileResponse(FRONTEND_DIR / "index.html")
+    return FileResponse(FRONTEND_DIR / "index.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/login")
 def serve_login_page():
     """Sert la page de connexion (frontend/login.html)."""
-    return FileResponse(FRONTEND_DIR / "login.html")
+    return FileResponse(FRONTEND_DIR / "login.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/register")
 def serve_register_page():
     """Sert la page d'inscription (frontend/register.html)."""
-    return FileResponse(FRONTEND_DIR / "register.html")
+    return FileResponse(FRONTEND_DIR / "register.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/pibrawl", include_in_schema=False)
 def serve_pibrawl_page():
-    return FileResponse(FRONTEND_DIR / "pibrawl.html")
+    return FileResponse(FRONTEND_DIR / "pibrawl.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/admin")
@@ -248,20 +255,20 @@ def serve_admin_page():
     is_admin) et surtout côté API (chaque route /api/admin/* revérifie
     les droits indépendamment, voir routes/rooms.py).
     """
-    return FileResponse(FRONTEND_DIR / "admin.html")
+    return FileResponse(FRONTEND_DIR / "admin.html", headers=HTML_NO_CACHE_HEADERS)
 
 @app.get("/moderation")
 def serve_moderation_page():
-    return FileResponse(FRONTEND_DIR / "moderation.html")
+    return FileResponse(FRONTEND_DIR / "moderation.html", headers=HTML_NO_CACHE_HEADERS)
 
 @app.get("/spaces")
 def serve_spaces_page():
-    return FileResponse(FRONTEND_DIR / "spaces.html")
+    return FileResponse(FRONTEND_DIR / "spaces.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/status")
 def serve_status_page():
-    return FileResponse(FRONTEND_DIR / "status.html")
+    return FileResponse(FRONTEND_DIR / "status.html", headers=HTML_NO_CACHE_HEADERS)
 
 
 @app.get("/setup")
@@ -276,4 +283,4 @@ def serve_setup_page():
             return RedirectResponse(url="/", status_code=303)
     except Exception:
         pass
-    return FileResponse(FRONTEND_DIR / "setup.html")
+    return FileResponse(FRONTEND_DIR / "setup.html", headers=HTML_NO_CACHE_HEADERS)

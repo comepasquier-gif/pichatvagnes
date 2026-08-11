@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>PiChat Animation Converter</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #07152f;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+.panel {
+    max-width: 900px;
+    margin: auto;
+    background: #10254b;
+    padding: 25px;
+    border-radius: 20px;
+}
+button, label {
+    background: #168cff;
+    border: 0;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+}
+input { margin: 15px; }
+canvas {
+    max-width: 100%;
+    margin-top: 20px;
+    background: transparent;
+}
+video {
+    max-width: 400px;
+    margin-top: 20px;
+}
+hr { margin: 30px 0; opacity: 0.25; }
+</style>
+</head>
+<body>
+<div class="panel">
+<h1>PiChat Animation System</h1>
+
+<h2>Planche → Animation</h2>
+<input id="sheetInput" type="file" accept="image/*">
+<br>
+<canvas id="animationCanvas"></canvas>
+
+<hr>
+
+<h2>Vidéo → Planche</h2>
+<input id="videoInput" type="file" accept="video/*">
+<br>
+
+<label>
+Nombre de frames :
+<input id="frameCount" type="number" value="48" min="2" max="300">
+</label>
+
+<br>
+<button id="makeSheet">Créer la planche</button>
+<br>
+<video id="video" controls muted></video>
+<br>
+<canvas id="sheetCanvas"></canvas>
+<br>
+<button id="saveSheet">Enregistrer la planche PNG</button>
+</div>
+
+<script>
+const sheetInput = document.getElementById("sheetInput");
+const animationCanvas = document.getElementById("animationCanvas");
+const animationCtx = animationCanvas.getContext("2d");
+
+let animationFrames = [];
+let animationFrame = 0;
+let playing = false;
+const FPS = 20;
+let lastAnimationTime = 0;
+
+sheetInput.addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const image = await loadImageFile(file);
+    animationFrames = detectFrames(image);
+
+    console.log(animationFrames.length, "frames détectées");
+
+    if (!animationFrames.length) return;
+
+    animationCanvas.width = animationFrames[0].width;
+    animationCanvas.height = animationFrames[0].height;
+
+    animationFrame = 0;
+    playing = true;
+    lastAnimationTime = 0;
+    requestAnimationFrame(playAnimation);
+});
+
+function loadImageFile(file) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => {
+            URL.revokeObjectURL(image.src);
+            resolve(image);
+        };
+
+        image.onerror = reject;
+        image.src = URL.createObjectURL(file);
+    });
+}
+
+function detectFrames(image) {
+    const temp = document.createElement("canvas");
+    temp.width = image.width;
+    temp.height = image.height;
+
+    const ctx = temp.getContext("2d");
+    ctx.drawImage(image, 0, 0);
+
+    const pixels = ctx.getImageData(0, 0, temp.width, temp.height);
+
+    const vertical = detectVerticalLines(pixels);
+    const horizontal = detectHorizontalLines(pixels);
+
+    const columns = createZones(vertical, image.width);
+    const rows = createZones(horizontal, image.height);
+
+    const frames = [];
+
+    for (const row of rows) {
+        for (const column of columns) {
+            const width = column.end - column.start;
+            const height = row.end - row.start;
+
+            if (width < 20 || height < 20) continue;
+
+            const frame = document.createElement("canvas");
+            frame.width = width;
+            frame.height = height;
+
+            const frameCtx = frame.getContext("2d");
+
+            frameCtx.drawImage(
+                image,
+                column.start,
+                row.start,
+                width,
+                height,
+                0,
+                0,
+                width,
+                height
+            );
+
+            removeGreen(frame);
+            frames.push(frame);
+        }
+    }
+
+    return frames;
+}
+
+function isBlack(r, g, b) {
+    return r < 55 && g < 55 && b < 55;
+}
+
+function detectVerticalLines(imageData) {
+    const result = [];
+
+    for (let x = 0; x < imageData.width; x++) {
+        let black = 0;
+        let samples = 0;
+
+        for (let y = 0; y < imageData.height; y += 4) {
+            const index = (y * imageData.width + x) * 4;
+
+            if (isBlack(
+                imageData.data[index],
+                imageData.data[index + 1],
+                imageData.data[index + 2]
+            )) {
+                black++;
+            }
+
+            samples++;
+        }
+
+        if (black / samples > 0.70) result.push(x);
+    }
+
+    return mergeLines(result);
+}
+
+function detectHorizontalLines(imageData) {
+    const result = [];
+
+    for (let y = 0; y < imageData.height; y++) {
+        let black = 0;
+        let samples = 0;
+
+        for (let x = 0; x < imageData.width; x += 4) {
+            const index = (y * imageData.width + x) * 4;
+
+            if (isBlack(
+                imageData.data[index],
+                imageData.data[index + 1],
+                imageData.data[index + 2]
+            )) {
+                black++;
+            }
+
+            samples++;
+        }
+
+        if (black / samples > 0.70) result.push(y);
+    }
+
+    return mergeLines(result);
+}
+
+function mergeLines(lines) {
+    if (!lines.length) return [];
+
+    const groups = [];
+    let start = lines[0];
+    let previous = lines[0];
+
+    for (let i = 1; i < lines.length; i++) {
+        if (lines[i] > previous + 1) {
+            groups.push({ start, end: previous });
+            start = lines[i];
+        }
+        previous = lines[i];
+    }
+
+    groups.push({ start, end: previous });
+    return groups;
+}
+
+function createZones(lines, max) {
+    const zones = [];
+    let start = 0;
+
+    for (const line of lines) {
+        if (line.start - start > 20) {
+            zones.push({
+                start,
+                end: line.start
+            });
+        }
+
+        start = line.end + 1;
+    }
+
+    if (max - start > 20) {
+        zones.push({
+            start,
+            end: max
+        });
+    }
+
+    return zones;
+}
+
+function removeGreen(canvas) {
+    const ctx = canvas.getContext("2d");
+    const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = image.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+
+        if (
+            g > 90 &&
+            g > r * 1.35 &&
+            g > b * 1.35
+        ) {
+            data[i + 3] = 0;
+        }
+    }
+
+    ctx.putImageData(image, 0, 0);
+}
+
+function playAnimation(time) {
+    if (!playing) return;
+
+    const interval = 1000 / FPS;
+
+    if (time - lastAnimationTime >= interval) {
+        const frame = animationFrames[animationFrame];
+
+        animationCtx.clearRect(
+            0,
+            0,
+            animationCanvas.width,
+            animationCanvas.height
+        );
+
+        animationCtx.drawImage(frame, 0, 0);
+
+        animationFrame++;
+
+        if (animationFrame >= animationFrames.length) {
+            animationFrame = 0;
+        }
+
+        lastAnimationTime = time;
+    }
+
+    requestAnimationFrame(playAnimation);
+}
+
+/* ==========================================================
+   VIDÉO → PLANCHE D'IMAGES
+   ========================================================== */
+
+const videoInput = document.getElementById("videoInput");
+const video = document.getElementById("video");
+const makeSheet = document.getElementById("makeSheet");
+const frameCountInput = document.getElementById("frameCount");
+const sheetCanvas = document.getElementById("sheetCanvas");
+const sheetCtx = sheetCanvas.getContext("2d");
+
+videoInput.addEventListener("change", event => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    video.src = URL.createObjectURL(file);
+    video.load();
+});
+
+makeSheet.addEventListener("click", async () => {
+    if (!video.src || !Number.isFinite(video.duration) || video.duration <= 0) {
+        alert("Charge d'abord une vidéo.");
+        return;
+    }
+
+    const frameCount = Math.max(
+        2,
+        parseInt(frameCountInput.value, 10) || 48
+    );
+
+    const columns = 8;
+    const rows = Math.ceil(frameCount / columns);
+
+    const frameWidth = video.videoWidth;
+    const frameHeight = video.videoHeight;
+
+    sheetCanvas.width = frameWidth * columns;
+    sheetCanvas.height = frameHeight * rows;
+
+    sheetCtx.clearRect(
+        0,
+        0,
+        sheetCanvas.width,
+        sheetCanvas.height
+    );
+
+    for (let i = 0; i < frameCount; i++) {
+        const time =
+            (i / frameCount) *
+            Math.max(0, video.duration - 0.001);
+
+        await seekVideo(video, time);
+
+        const column = i % columns;
+        const row = Math.floor(i / columns);
+
+        const x = column * frameWidth;
+        const y = row * frameHeight;
+
+        sheetCtx.drawImage(
+            video,
+            0,
+            0,
+            frameWidth,
+            frameHeight,
+            x,
+            y,
+            frameWidth,
+            frameHeight
+        );
+
+        sheetCtx.strokeStyle = "#000";
+        sheetCtx.lineWidth = 4;
+        sheetCtx.strokeRect(
+            x,
+            y,
+            frameWidth,
+            frameHeight
+        );
+    }
+
+    alert("Planche terminée !");
+});
+
+function seekVideo(video, time) {
+    return new Promise(resolve => {
+        const done = () => {
+            video.removeEventListener("seeked", done);
+            resolve();
+        };
+
+        video.addEventListener("seeked", done);
+        video.currentTime = time;
+    });
+}
+
+document.getElementById("saveSheet").addEventListener("click", () => {
+    if (!sheetCanvas.width) return;
+
+    const link = document.createElement("a");
+    link.download = "pichat-spritesheet.png";
+    link.href = sheetCanvas.toDataURL("image/png");
+    link.click();
+});
+</script>
+</body>
+</html>

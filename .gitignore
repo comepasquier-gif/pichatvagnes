@@ -1,0 +1,24 @@
+# PiChat — ne jamais versionner les secrets ou données runtime
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Bases et données locales
+database/*.db
+database/*.sqlite*
+backups/*.zip
+uploads/*
+!uploads/.gitkeep
+runtime/
+logs/
+
+# IDE / outils
+.vscode/
+.idea/
+.pytest_cache/
+.coverage
